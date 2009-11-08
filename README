@@ -1,3 +1,25 @@
+Arora-mini web browser
+
+Arora-mini is a fork of Arora with some improvements meant for small Linux devices, such as mobile phones or PDAs. The goal of this project is to implement the following changes:
+
+* simpler UI (means removing some functionality)
+* smart zoom
+ * at first you see page as you have 1024px-width screen
+ * clicking on a page sets zooms to 100% and centers the screen where you clicked
+ * clicking now activates links and other web content
+ * you have "overview" button that shows you the thumbnail of the page again
+* scroll by finger with (iPhone style) or without kinetics (AdobeReader style)
+* optimization of creating WebKit widgets (always keep 4 of them ready or something similar, to boost "open in new tab")
+* integration of userscripts.org and userstyles.org (this would be a way to modify some of the sites, to better match small device screen)
+* BONUS FEATURE: configurable integration with minimizing proxy like RabbIT3 (make images smaller, gzip texts, keep connection to only one server, not to many)
+* BONUS FEATURE: compile this statically with the newest and fastest Qt and distribute to www.opkg.org or similar sites for different devices.
+
+Currently none from the list above is implemented.
+
+When they are all done and the browser remains fast, we'll finally have a nice browser for X11/Linux based phones!
+
+Original Arora REAMDE below:
+
 Arora web browser
 
 http://www.arora-browser.org
