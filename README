@@ -4,7 +4,21 @@ http://www.arora-browser.org
 
 Arora is a cross platform web browser built using Qt and WebKit.
 
+Arora-mini is a small modification that adds:
+
+* Moving page around by dragging its content
+* Smaller menu when launched with --menu.
+  However it messes with default ones after using the --mini,
+  so be careful, do backup of .config/arora-browser.org etc.)
 
 Building:
 Arora uses the qmake build system.  If you already have Qt 4.5 or newer on your system building is as easy as running the command 'qmake' and then 'make' or 'nmake' on Windows.
 For more detailed information see http://code.google.com/p/arora/wiki/source?tm=4
+
+In short:
+$ git clone git://github.com/gabrys/arora-mini.git
+$ cd arora-mini
+$ qmake
+$ make
+$ ./arora --mini
+

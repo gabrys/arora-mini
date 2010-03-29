@@ -102,7 +102,7 @@ Q_DECLARE_METATYPE(QWebElement)
 WebView::WebView(QWidget *parent)
     : QWebView(parent)
     , m_progress(0)
-    , m_currentZoom(100)
+    , m_currentZoom(45)
     , m_page(new WebPage(this))
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     , m_enableAccessKeys(true)
@@ -134,9 +134,9 @@ WebView::WebView(QWidget *parent)
     setAcceptDrops(true);
 
     // the zoom values (in percent) are chosen to be like in Mozilla Firefox 3
-    m_zoomLevels << 30 << 50 << 67 << 80 << 90;
+    m_zoomLevels << 20 << 45 << 60 << 80; // << 67 << 80 << 90;
     m_zoomLevels << 100;
-    m_zoomLevels << 110 << 120 << 133 << 150 << 170 << 200 << 240 << 300;
+//    m_zoomLevels << 110 << 120 << 133 << 150 << 170 << 200 << 240 << 300;
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     connect(m_page, SIGNAL(loadStarted()),
             this, SLOT(hideAccessKeys()));
@@ -144,6 +144,8 @@ WebView::WebView(QWidget *parent)
             this, SLOT(hideAccessKeys()));
 #endif
     loadSettings();
+    resetZoom();
+    flickcharm.activateOn(this);
 }
 
 void WebView::loadSettings()
@@ -291,10 +293,10 @@ void WebView::contextMenuEvent(QContextMenuEvent *event)
     }
 
     if (!menu->isEmpty()) {
-        if (BrowserMainWindow::parentWindow(tabWidget())->menuBar()->isHidden()) {
-            menu->addSeparator();
-            menu->addAction(BrowserMainWindow::parentWindow(tabWidget())->showMenuBarAction());
-        }
+//        if (BrowserMainWindow::parentWindow(tabWidget())->menuBar()->isHidden()) {
+//            menu->addSeparator();
+//            menu->addAction(BrowserMainWindow::parentWindow(tabWidget())->showMenuBarAction());
+//        }
 
         menu->exec(mapToGlobal(event->pos()));
         delete menu;
@@ -560,7 +562,7 @@ void WebView::zoomOut()
 
 void WebView::resetZoom()
 {
-    m_currentZoom = 100;
+    m_currentZoom = 45;
     applyZoom();
 }
 

@@ -230,6 +230,37 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     retranslate();
 }
 
+void BrowserMainWindow::makeMini()
+{
+    resize(480, 640);
+
+    menuBar()->setVisible(false);
+    statusBar()->setVisible(false);
+
+    addToolBar(Qt::BottomToolBarArea, m_navigationBar);
+    m_navigationBar->setMovable(false);
+    m_navigationBar->clear();
+    m_navigationBar->setIconSize(QSize(100, 100));
+    
+    m_historyBackAction->setMenu(NULL);
+    m_navigationBar->addAction(m_historyBackAction);
+    
+    m_navigationBar->addAction(m_viewZoomInAction);
+    m_navigationBar->addAction(m_viewZoomOutAction);
+
+    QAction *pages = new QAction(this);
+    pages->setText(tr("Pages"));
+    m_navigationBar->addAction(pages);
+
+#if QT_VERSION >= 0x040600
+    m_historyBackAction->setIcon(QIcon::fromTheme(QString::fromAscii("back")));
+    m_viewZoomInAction->setIcon(QIcon::fromTheme(QString::fromAscii("zoom-in")));
+    m_viewZoomOutAction->setIcon(QIcon::fromTheme(QString::fromAscii("zoom-out")));
+    pages->setIcon(QIcon::fromTheme(QString::fromAscii("up")));
+#endif
+
+}
+
 BrowserMainWindow::~BrowserMainWindow()
 {
     m_autoSaver->changeOccurred();

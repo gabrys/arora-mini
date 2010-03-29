@@ -27,13 +27,22 @@ int main(int argc, char **argv)
 {
     Q_INIT_RESOURCE(htmls);
     Q_INIT_RESOURCE(data);
+    int mini = 0;
+    for (int i = 1, j = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--mini") == 0) {
+            mini++;
+        } else {
+            argv[i - mini] = argv[i];
+        }
+    }
+    argc -= mini;
     BrowserApplication application(argc, argv);
     if (!application.isRunning())
         return 0;
 #ifdef Q_OS_WIN
     application.setStyle(new ExplorerStyle);
 #endif
-    application.newMainWindow();
+    application.newMainWindow(mini);
     return application.exec();
 }
 

@@ -67,13 +67,14 @@
 #include <qwebview.h>
 
 #include "tabwidget.h"
+#include "flickcharm.h"
 
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
 #include <qwebelement.h>
 class QLabel;
 #endif
 
-class BrowserMainWindow;
+//class BrowserMainWindow;
 class TabWidget;
 class WebPage;
 class WebView : public QWebView
@@ -123,6 +124,7 @@ protected:
 
 private:
     int levelForZoom(int zoom);
+    FlickCharm flickcharm;
 
 private slots:
     void setProgress(int progress);

@@ -172,6 +172,7 @@ private:
     void loadDefaultState();
     void setupMenu();
     void setupToolBar();
+    void makeMini();
     void updateStopReloadActionText(bool loading);
 
 private:

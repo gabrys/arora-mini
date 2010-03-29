@@ -546,7 +546,7 @@ void BrowserApplication::openUrl(const QUrl &url)
     mainWindow()->tabWidget()->loadUrl(url);
 }
 
-BrowserMainWindow *BrowserApplication::newMainWindow()
+BrowserMainWindow *BrowserApplication::newMainWindow(bool mini)
 {
     if (!m_mainWindows.isEmpty())
         mainWindow()->m_autoSaver->saveIfNeccessary();
@@ -554,6 +554,9 @@ BrowserMainWindow *BrowserApplication::newMainWindow()
     m_mainWindows.prepend(browser);
     connect(this, SIGNAL(privacyChanged(bool)),
             browser, SLOT(privacyChanged(bool)));
+    if (mini) {
+        browser->makeMini();
+    }
     browser->show();
     return browser;
 }

@@ -123,7 +123,7 @@ public:
 #endif
 
 public slots:
-    BrowserMainWindow *newMainWindow();
+    BrowserMainWindow *newMainWindow(bool mini = false);
     bool restoreLastSession();
 #if defined(Q_WS_MAC)
     void lastWindowClosed();
