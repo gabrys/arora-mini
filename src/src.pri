@@ -103,6 +103,7 @@ include(useragent/useragent.pri)
 
 RESOURCES += \
     $$PWD/data/data.qrc \
+    $$PWD/data/css/css.qrc \
     $$PWD/data/graphics/graphics.qrc \
     $$PWD/data/searchengines/searchengines.qrc \
     $$PWD/htmls/htmls.qrc

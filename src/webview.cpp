@@ -102,7 +102,7 @@ Q_DECLARE_METATYPE(QWebElement)
 WebView::WebView(QWidget *parent)
     : QWebView(parent)
     , m_progress(0)
-    , m_currentZoom(45)
+    , m_currentZoom(60)
     , m_page(new WebPage(this))
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     , m_enableAccessKeys(true)
@@ -134,15 +134,16 @@ WebView::WebView(QWidget *parent)
     setAcceptDrops(true);
 
     // the zoom values (in percent) are chosen to be like in Mozilla Firefox 3
-    m_zoomLevels << 20 << 45 << 60 << 80; // << 67 << 80 << 90;
-    m_zoomLevels << 100;
-//    m_zoomLevels << 110 << 120 << 133 << 150 << 170 << 200 << 240 << 300;
+    m_zoomLevels << 20 << 45;
+    m_zoomLevels << 60;
+    m_zoomLevels << 80 << 100 << 150 << 200;
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     connect(m_page, SIGNAL(loadStarted()),
             this, SLOT(hideAccessKeys()));
     connect(m_page, SIGNAL(scrollRequested(int, int, const QRect &)),
             this, SLOT(hideAccessKeys()));
 #endif
+
     loadSettings();
     resetZoom();
     flickcharm.activateOn(this);

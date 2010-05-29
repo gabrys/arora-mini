@@ -380,7 +380,8 @@ void BrowserApplication::loadSettings()
 #endif
 
     QUrl url = settings.value(QLatin1String("userStyleSheet")).toUrl();
-    defaultSettings->setUserStyleSheetUrl(url);
+    //defaultSettings->setUserStyleSheetUrl(url);
+    defaultSettings->setUserStyleSheetUrl(QUrl(QString::fromAscii("file:///tmp/style.css")));
 
     int maximumPagesInCache = settings.value(QLatin1String("maximumPagesInCache"), 3).toInt();
     QWebSettings::globalSettings()->setMaximumPagesInCache(maximumPagesInCache);
