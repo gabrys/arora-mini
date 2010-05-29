@@ -36,6 +36,9 @@ int main(int argc, char **argv)
         }
     }
     argc -= mini;
+#ifdef Q_WS_X11
+    QApplication::setGraphicsSystem(QString::fromLatin1("raster"));
+#endif
     BrowserApplication application(argc, argv);
     if (!application.isRunning())
         return 0;
