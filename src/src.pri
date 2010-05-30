@@ -44,7 +44,6 @@ HEADERS += \
     clearprivatedata.h \
     clearbutton.h \
     downloadmanager.h \
-    flickcharm.h \
     modelmenu.h \
     modeltoolbar.h \
     plaintexteditsearch.h \
@@ -73,7 +72,6 @@ SOURCES += \
     clearprivatedata.cpp \
     clearbutton.cpp \
     downloadmanager.cpp \
-    flickcharm.cpp \
     modelmenu.cpp \
     modeltoolbar.cpp \
     plaintexteditsearch.cpp \

@@ -1,5 +1,4 @@
 /*
- * Copyright 2010 Piotr Gabryjeluk <piotr@gabryjeluk.pl>
  * Copyright 2008-2009 Benjamin C. Meyer <ben@meyerhome.net>
  * Copyright 2008 Ariya Hidayat <ariya.hidayat@gmail.com>
  *
@@ -68,7 +67,6 @@
 #include <qwebview.h>
 
 #include "tabwidget.h"
-#include "flickcharm.h"
 
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
 #include <qwebelement.h>
@@ -125,7 +123,6 @@ protected:
 
 private:
     int levelForZoom(int zoom);
-    FlickCharm flickcharm;
 
 private slots:
     void setProgress(int progress);
@@ -154,7 +151,6 @@ private:
     QUrl m_initialUrl;
     int m_progress;
     int m_currentZoom;
-    bool m_enableFingerScrolling;
     QList<int> m_zoomLevels;
     WebPage *m_page;
 

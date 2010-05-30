@@ -1,5 +1,4 @@
 /*
- * Copyright 2010 Piotr Gabryjeluk <piotr@gabryjeluk.pl>
  * Copyright 2008-2009 Benjamin C. Meyer <ben@meyerhome.net>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -286,7 +285,6 @@ void SettingsDialog::loadFromSettings()
 #else
     enableAccessKeys->setEnabled(false);
 #endif
-    enableFingerScrolling->setChecked(settings.value(QLatin1String("enableFingerScrolling"), false).toBool());
 
     settings.beginGroup(QLatin1String("autofill"));
     autoFillPasswordFormsCheckBox->setChecked(settings.value(QLatin1String("passwordForms"), true).toBool());
@@ -433,12 +431,11 @@ void SettingsDialog::saveToSettings()
     settings.endGroup();
 
     // Accessibility
-    settings.beginGroup(QLatin1String("WebView"));
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
+    settings.beginGroup(QLatin1String("WebView"));
     settings.setValue(QLatin1String("enableAccessKeys"), enableAccessKeys->isChecked());
-#endif
-    settings.setValue(QLatin1String("enableFingerScrolling"), enableFingerScrolling->isChecked());
     settings.endGroup();
+#endif
 
     BrowserApplication::instance()->loadSettings();
     BrowserApplication::networkAccessManager()->loadSettings();

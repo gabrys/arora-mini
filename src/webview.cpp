@@ -1,5 +1,4 @@
 /*
- * Copyright 2010 Piotr Gabryjeluk <piotr@gabryjeluk.pl>
  * Copyright 2008-2009 Benjamin C. Meyer <ben@meyerhome.net>
  * Copyright 2008 Jason A. Donenfeld <Jason@zx2c4.com>
  * Copyright 2008 Ariya Hidayat <ariya.hidayat@gmail.com>
@@ -63,8 +62,6 @@
 **
 ****************************************************************************/
 
-#include <iostream>
-
 #include "webview.h"
 
 #include "adblockdialog.h"
@@ -108,7 +105,6 @@ WebView::WebView(QWidget *parent)
     : QWebView(parent)
     , m_progress(0)
     , m_currentZoom(100)
-    , m_enableFingerScrolling(false)
     , m_page(new WebPage(this))
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     , m_enableAccessKeys(true)
@@ -150,10 +146,6 @@ WebView::WebView(QWidget *parent)
             this, SLOT(hideAccessKeys()));
 #endif
     loadSettings();
-    if (m_enableFingerScrolling) {
-        std::cout << "dupa" << std::endl;
-        flickcharm.activateOn(this);
-    }
 }
 
 void WebView::loadSettings()
@@ -166,7 +158,6 @@ void WebView::loadSettings()
     if (!m_enableAccessKeys)
         hideAccessKeys();
 #endif
-    m_enableFingerScrolling = settings.value(QLatin1String("enableAccessKeys"), m_enableFingerScrolling).toBool();
     m_page->loadSettings();
 }
 
