@@ -121,7 +121,6 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     , m_bookmarksToolbar(0)
     , m_tabWidget(new TabWidget(this))
     , m_autoSaver(new AutoSaver(this))
-    , m_miniMenu(new MiniMenu(this))
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     statusBar()->setSizeGripEnabled(true);
@@ -178,7 +177,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     addToolBar(m_bookmarksToolbar);
 #endif
     layout->addWidget(m_tabWidget);
-    layout->addWidget(m_miniMenu);
+    //layout->addWidget(m_miniMenu); TODO
     centralWidget->setLayout(layout);
     setCentralWidget(centralWidget);
 
