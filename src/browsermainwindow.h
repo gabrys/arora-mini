@@ -76,6 +76,7 @@ class QFrame;
 class HistoryMenu;
 class BookmarksMenuBarMenu;
 class UserAgentMenu;
+class QTimer;
 
 /*!
     The MainWindow of the Browser Application.
@@ -264,6 +265,8 @@ private:
     // used to determine if these bars should be reshown when leaving fullscreen.
     bool m_menuBarVisible;
     bool m_statusBarVisible;
+    QTimer *m_statusBarHideTimer;
+    int m_statusBarHideTimeout;
 
     friend class BrowserApplication;
 };

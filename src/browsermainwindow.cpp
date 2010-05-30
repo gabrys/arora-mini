@@ -121,6 +121,8 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     , m_bookmarksToolbar(0)
     , m_tabWidget(new TabWidget(this))
     , m_autoSaver(new AutoSaver(this))
+    , m_statusBarHideTimer(0)
+    , m_statusBarHideTimeout(1000)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     statusBar()->setSizeGripEnabled(true);
@@ -183,9 +185,10 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
 
     connect(m_tabWidget, SIGNAL(setCurrentTitle(const QString &)),
             this, SLOT(updateWindowTitle(const QString &)));
-/*
+
     connect(m_tabWidget, SIGNAL(showStatusBarMessage(const QString&)),
-            statusBar(), SLOT(showMessage(const QString&)));
+            this, SLOT(updateStatusbar(const QString&)));
+/*
     connect(m_tabWidget, SIGNAL(linkHovered(const QString&)),
             statusBar(), SLOT(showMessage(const QString&)));
 */
@@ -1179,7 +1182,19 @@ void BrowserMainWindow::preferences()
 
 void BrowserMainWindow::updateStatusbar(const QString &string)
 {
-    statusBar()->showMessage(string, 2000);
+#ifdef BROWSERAPPLICATION_DEBUG
+    qDebug() << __FUNCTION__;
+#endif
+    if (m_statusBarHideTimer != 0) {
+        disconnect(m_statusBarHideTimer, SIGNAL(timeout()), statusBar(), SLOT(hide()));
+        delete m_statusBarHideTimer;
+    }
+    statusBar()->setVisible(true);
+    m_statusBarHideTimer = new QTimer();
+    connect(m_statusBarHideTimer, SIGNAL(timeout()), statusBar(), SLOT(hide()));
+    m_statusBarHideTimer->setSingleShot(true);
+    m_statusBarHideTimer->start(m_statusBarHideTimeout);
+    statusBar()->showMessage(string, m_statusBarHideTimeout);
 }
 
 void BrowserMainWindow::updateWindowTitle(const QString &title)

@@ -78,15 +78,18 @@ AutoSaver::AutoSaver(QObject *parent) : QObject(parent)
 
 AutoSaver::~AutoSaver()
 {
+    /*
     if (m_timer.isActive()) {
         qWarning() << "AutoSaver: still active when destroyed, changes not saved.";
         if (parent() && parent()->metaObject())
             qWarning() << parent() << parent()->metaObject()->className() << "should call saveIfNeccessary";
     }
+    */
 }
 
 void AutoSaver::changeOccurred()
 {
+    /*
     if (m_firstChange.isNull())
         m_firstChange.start();
 
@@ -95,19 +98,23 @@ void AutoSaver::changeOccurred()
     } else {
         m_timer.start(AUTOSAVE_IN, this);
     }
+    */
 }
 
 void AutoSaver::timerEvent(QTimerEvent *event)
 {
+    /*
     if (event->timerId() == m_timer.timerId()) {
         saveIfNeccessary();
     } else {
         QObject::timerEvent(event);
     }
+    */
 }
 
 void AutoSaver::saveIfNeccessary()
 {
+    /*
     if (!m_timer.isActive())
         return;
     m_timer.stop();
@@ -115,5 +122,6 @@ void AutoSaver::saveIfNeccessary()
     if (!QMetaObject::invokeMethod(parent(), "save", Qt::DirectConnection)) {
         qWarning() << "AutoSaver: error invoking slot save() on parent";
     }
+    */
 }
 
