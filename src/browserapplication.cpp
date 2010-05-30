@@ -377,6 +377,7 @@ void BrowserApplication::loadSettings()
     defaultSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, settings.value(QLatin1String("enableInspector"), false).toBool());
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     defaultSettings->setAttribute(QWebSettings::DnsPrefetchEnabled, true);
+    defaultSettings->setAttribute(QWebSettings::FrameFlatteningEnabled, true);
 #endif
 
     QUrl url = settings.value(QLatin1String("userStyleSheet")).toUrl();
