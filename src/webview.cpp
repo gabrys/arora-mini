@@ -214,6 +214,7 @@ TabWidget *WebView::tabWidget() const
 
 void WebView::contextMenuEvent(QContextMenuEvent *event)
 {
+    /*
     QMenu *menu = new QMenu(this);
 
     QWebHitTestResult r = page()->mainFrame()->hitTestContent(event->pos());
@@ -303,7 +304,7 @@ void WebView::contextMenuEvent(QContextMenuEvent *event)
         return;
     }
     delete menu;
-
+    */
     QWebView::contextMenuEvent(event);
 }
 
