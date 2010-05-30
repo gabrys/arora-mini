@@ -90,7 +90,7 @@
 #include <windows.h>
 #endif
 
-// #define BROWSERAPPLICATION_DEBUG
+#define BROWSERAPPLICATION_DEBUG
 
 DownloadManager *BrowserApplication::s_downloadManager = 0;
 HistoryManager *BrowserApplication::s_historyManager = 0;
@@ -103,9 +103,9 @@ BrowserApplication::BrowserApplication(int &argc, char **argv)
     : SingleApplication(argc, argv)
     , quitting(false)
 {
-    QCoreApplication::setOrganizationDomain(QLatin1String("arora-browser.org"));
-    QCoreApplication::setApplicationName(QLatin1String("Arora"));
-    QCoreApplication::setApplicationVersion(QLatin1String("0.10.2"
+    QCoreApplication::setOrganizationDomain(QLatin1String("arora-mini.wikidot.com"));
+    QCoreApplication::setApplicationName(QLatin1String("Arora-mini"));
+    QCoreApplication::setApplicationVersion(QLatin1String("0.0.1"
 #ifdef GITVERSION
     " (Git: " GITCHANGENUMBER " " GITVERSION ")"
 #endif
