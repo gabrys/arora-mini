@@ -240,11 +240,11 @@ void BrowserApplication::messageReceived(QLocalSocket *socket)
 #ifdef Q_OS_WIN
         QString winid = QString(QLatin1String("%1")).arg((qlonglong)mainWindow()->winId());
 #else
-        mainWindow()->show();
-        mainWindow()->setFocus();
+        mainWindow()->centralWidget()->show();
+/*        mainWindow()->setFocus();
         mainWindow()->raise();
         mainWindow()->activateWindow();
-        alert(mainWindow());
+        alert(mainWindow());*/
         QString winid;
 #endif
 #ifdef BROWSERAPPLICATION_DEBUG

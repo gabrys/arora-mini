@@ -122,7 +122,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     , m_tabWidget(new TabWidget(this))
     , m_autoSaver(new AutoSaver(this))
     , m_statusBarHideTimer(0)
-    , m_statusBarHideTimeout(1000)
+    , m_statusBarMessageTimeout(1000)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     statusBar()->setSizeGripEnabled(true);
@@ -214,6 +214,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
 */
 
     statusBar()->setVisible(false);
+    m_navigationBar->setVisible(false);
 
     updateWindowTitle();
     loadDefaultState();
@@ -1020,7 +1021,7 @@ void BrowserMainWindow::retranslate()
     m_helpAboutApplicationAction->setText(tr("About &%1", "About Browser").arg(QApplication::applicationName()));
 
     // Toolbar
-    m_navigationBar->setWindowTitle(tr("Navigation"));
+    //m_navigationBar->setWindowTitle(tr("Navigation"));
     m_bookmarksToolbar->setWindowTitle(tr("&Bookmarks"));
 
     m_stopReloadAction->setText(tr("Reload / Stop"));
@@ -1031,7 +1032,7 @@ void BrowserMainWindow::setupToolBar()
 {
     setUnifiedTitleAndToolBarOnMac(true);
     m_navigationBar = new QToolBar(this);
-    m_navigationBar->setObjectName(QLatin1String("NavigationToolBar"));
+    //m_navigationBar->setObjectName(QLatin1String("NavigationToolBar"));
     //addToolBar(m_navigationBar);
 
     m_historyBackAction->setIcon(style()->standardIcon(QStyle::SP_ArrowBack, 0, this));
@@ -1041,7 +1042,7 @@ void BrowserMainWindow::setupToolBar()
             this, SLOT(aboutToShowBackMenu()));
     connect(m_historyBackMenu, SIGNAL(triggered(QAction *)),
             this, SLOT(openActionUrl(QAction *)));
-    m_navigationBar->addAction(m_historyBackAction);
+    //m_navigationBar->addAction(m_historyBackAction);
 
     m_historyForwardAction->setIcon(style()->standardIcon(QStyle::SP_ArrowForward, 0, this));
     m_historyForwardMenu = new QMenu(this);
@@ -1050,23 +1051,23 @@ void BrowserMainWindow::setupToolBar()
     connect(m_historyForwardMenu, SIGNAL(triggered(QAction *)),
             this, SLOT(openActionUrl(QAction *)));
     m_historyForwardAction->setMenu(m_historyForwardMenu);
-    m_navigationBar->addAction(m_historyForwardAction);
+    //m_navigationBar->addAction(m_historyForwardAction);
 
     m_stopReloadAction = new QAction(this);
     m_stopReloadAction->setIcon(m_reloadIcon);
-    m_navigationBar->addAction(m_stopReloadAction);
+    //m_navigationBar->addAction(m_stopReloadAction);
 
     m_navigationSplitter = new QSplitter(m_navigationBar);
     m_navigationSplitter->addWidget(m_tabWidget->locationBarStack());
 
     m_toolbarSearch = new ToolbarSearch(m_navigationBar);
     m_navigationSplitter->addWidget(m_toolbarSearch);
-    connect(m_toolbarSearch, SIGNAL(search(const QUrl&, TabWidget::OpenUrlIn)),
-            m_tabWidget, SLOT(loadUrl(const QUrl&, TabWidget::OpenUrlIn)));
+    /*connect(m_toolbarSearch, SIGNAL(search(const QUrl&, TabWidget::OpenUrlIn)),
+            m_tabWidget, SLOT(loadUrl(const QUrl&, TabWidget::OpenUrlIn)));*/
     m_navigationSplitter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     m_tabWidget->locationBarStack()->setMinimumWidth(120);
     m_navigationSplitter->setCollapsible(0, false);
-    m_navigationBar->addWidget(m_navigationSplitter);
+    //m_navigationBar->addWidget(m_navigationSplitter);
     int splitterWidth = m_navigationSplitter->width();
     QList<int> sizes;
     sizes << (int)((double)splitterWidth * .80) << (int)((double)splitterWidth * .20);
@@ -1188,13 +1189,14 @@ void BrowserMainWindow::updateStatusbar(const QString &string)
     if (m_statusBarHideTimer != 0) {
         disconnect(m_statusBarHideTimer, SIGNAL(timeout()), statusBar(), SLOT(hide()));
         delete m_statusBarHideTimer;
+        m_statusBarHideTimer = 0;
     }
     statusBar()->setVisible(true);
     m_statusBarHideTimer = new QTimer();
     connect(m_statusBarHideTimer, SIGNAL(timeout()), statusBar(), SLOT(hide()));
     m_statusBarHideTimer->setSingleShot(true);
-    m_statusBarHideTimer->start(m_statusBarHideTimeout);
-    statusBar()->showMessage(string, m_statusBarHideTimeout);
+    m_statusBarHideTimer->start(m_statusBarMessageTimeout);
+    statusBar()->showMessage(string, m_statusBarMessageTimeout);
 }
 
 void BrowserMainWindow::updateWindowTitle(const QString &title)
@@ -1503,6 +1505,7 @@ void BrowserMainWindow::updateStopReloadActionText(bool loading)
 
 void BrowserMainWindow::loadProgress(int progress)
 {
+/*
     if (progress < 100 && progress > 0) {
         disconnect(m_stopReloadAction, SIGNAL(triggered()), m_viewReloadAction, SLOT(trigger()));
         m_stopReloadAction->setIcon(m_stopIcon);
@@ -1514,6 +1517,7 @@ void BrowserMainWindow::loadProgress(int progress)
         connect(m_stopReloadAction, SIGNAL(triggered()), m_viewReloadAction, SLOT(trigger()));
         updateStopReloadActionText(false);
     }
+*/
 }
 
 void BrowserMainWindow::showSearchDialog()

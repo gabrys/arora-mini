@@ -266,7 +266,7 @@ private:
     bool m_menuBarVisible;
     bool m_statusBarVisible;
     QTimer *m_statusBarHideTimer;
-    int m_statusBarHideTimeout;
+    int m_statusBarMessageTimeout;
 
     friend class BrowserApplication;
 };
