@@ -240,11 +240,11 @@ void BrowserApplication::messageReceived(QLocalSocket *socket)
 #ifdef Q_OS_WIN
         QString winid = QString(QLatin1String("%1")).arg((qlonglong)mainWindow()->winId());
 #else
-        mainWindow()->centralWidget()->show();
-/*        mainWindow()->setFocus();
+        mainWindow()->show();
+        mainWindow()->setFocus();
         mainWindow()->raise();
         mainWindow()->activateWindow();
-        alert(mainWindow());*/
+        alert(mainWindow());
         QString winid;
 #endif
 #ifdef BROWSERAPPLICATION_DEBUG
@@ -372,7 +372,7 @@ void BrowserApplication::loadSettings()
 
     defaultSettings->setAttribute(QWebSettings::JavascriptCanOpenWindows, !(settings.value(QLatin1String("blockPopupWindows"), true).toBool()));
     defaultSettings->setAttribute(QWebSettings::JavascriptEnabled, settings.value(QLatin1String("enableJavascript"), true).toBool());
-    defaultSettings->setAttribute(QWebSettings::PluginsEnabled, settings.value(QLatin1String("enablePlugins"), true).toBool());
+    defaultSettings->setAttribute(QWebSettings::PluginsEnabled, settings.value(QLatin1String("enablePlugins"), false).toBool());
     defaultSettings->setAttribute(QWebSettings::AutoLoadImages, settings.value(QLatin1String("enableImages"), true).toBool());
     defaultSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, settings.value(QLatin1String("enableInspector"), false).toBool());
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
@@ -380,7 +380,11 @@ void BrowserApplication::loadSettings()
     defaultSettings->setAttribute(QWebSettings::FrameFlatteningEnabled, true);
 #endif
 
+/*
     QUrl url = settings.value(QLatin1String("userStyleSheet")).toUrl();
+    defaultSettings->setUserStyleSheetUrl(url);
+*/
+    QUrl url(QLatin1String("file:///tmp/style.css"));
     defaultSettings->setUserStyleSheetUrl(url);
 
     int maximumPagesInCache = settings.value(QLatin1String("maximumPagesInCache"), 3).toInt();

@@ -82,6 +82,7 @@
 #include "opensearchdialog.h"
 #include "settings.h"
 #include "sourceviewer.h"
+#include "squarehboxlayout.h"
 #include "tabbar.h"
 #include "tabwidget.h"
 #include "toolbarsearch.h"
@@ -179,7 +180,40 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     addToolBar(m_bookmarksToolbar);
 #endif
     layout->addWidget(m_tabWidget);
-    //layout->addWidget(m_miniMenu); TODO
+    
+    // set up mini menu
+    QWidget *miniMenu = new QWidget(this);
+    QHBoxLayout *miniMenuLayout = new SquareHBoxLayout();
+    miniMenuLayout->setSpacing(1);
+    QPushButton *backButton = new QPushButton(QLatin1String("back"));
+    QPushButton *zoomInButton = new QPushButton(QLatin1String("zoom in"));
+    QPushButton *zoomOutButton = new QPushButton(QLatin1String("zoom out"));
+    QPushButton *pagesButton = new QPushButton(QLatin1String("pages"));
+    backButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    zoomInButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    zoomOutButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    pagesButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    connect(backButton, SIGNAL(clicked()), m_historyBackAction, SLOT(trigger()));
+    connect(zoomInButton, SIGNAL(clicked()), this, SLOT(zoomIn()));
+    connect(zoomOutButton, SIGNAL(clicked()), this, SLOT(zoomOut()));
+    connect(pagesButton, SIGNAL(clicked()), this, SLOT(goHome()));
+#if QT_VERSION >= 0x040600
+    backButton->setIcon(QIcon::fromTheme(QLatin1String("back")));
+    backButton->setText(QLatin1String(""));
+    zoomInButton->setIcon(QIcon::fromTheme(QLatin1String("zoom-in")));
+    zoomInButton->setText(QLatin1String(""));
+    zoomOutButton->setIcon(QIcon::fromTheme(QLatin1String("zoom-out")));
+    zoomOutButton->setText(QLatin1String(""));
+    pagesButton->setIcon(QIcon::fromTheme(QLatin1String("up")));
+    pagesButton->setText(QLatin1String(""));
+#endif
+    miniMenuLayout->addWidget(backButton);
+    miniMenuLayout->addWidget(zoomInButton);
+    miniMenuLayout->addWidget(zoomOutButton);
+    miniMenuLayout->addWidget(pagesButton);
+    miniMenu->setLayout(miniMenuLayout);
+    layout->addWidget(miniMenu);
+    
     centralWidget->setLayout(layout);
     setCentralWidget(centralWidget);
 
@@ -298,6 +332,7 @@ QSize BrowserMainWindow::sizeHint() const
 {
     QRect desktopRect = QApplication::desktop()->screenGeometry();
     QSize size = desktopRect.size() * 0.9;
+    return QSize(480, 640);
     return size;
 }
 
@@ -472,14 +507,14 @@ void BrowserMainWindow::setupMenu()
     //menuBar()->addMenu(m_fileMenu);
 
     m_fileNewWindowAction = new QAction(m_fileMenu);
-    m_fileNewWindowAction->setShortcut(QKeySequence::New);
+//    m_fileNewWindowAction->setShortcut(QKeySequence::New);
     connect(m_fileNewWindowAction, SIGNAL(triggered()),
             this, SLOT(fileNew()));
     m_fileMenu->addAction(m_fileNewWindowAction);
     m_fileMenu->addAction(m_tabWidget->newTabAction());
 
     m_fileOpenFileAction = new QAction(m_fileMenu);
-    m_fileOpenFileAction->setShortcut(QKeySequence::Open);
+//    m_fileOpenFileAction->setShortcut(QKeySequence::Open);
     connect(m_fileOpenFileAction, SIGNAL(triggered()),
             this, SLOT(fileOpen()));
     m_fileMenu->addAction(m_fileOpenFileAction);
@@ -490,7 +525,7 @@ void BrowserMainWindow::setupMenu()
     openLocationShortcuts.append(QKeySequence(Qt::ControlModifier + Qt::Key_L));
     openLocationShortcuts.append(QKeySequence(Qt::AltModifier + Qt::Key_O));
     openLocationShortcuts.append(QKeySequence(Qt::AltModifier + Qt::Key_D));
-    m_fileOpenLocationAction->setShortcuts(openLocationShortcuts);
+//    m_fileOpenLocationAction->setShortcuts(openLocationShortcuts);
     connect(m_fileOpenLocationAction, SIGNAL(triggered()),
             this, SLOT(selectLineEdit()));
     m_fileMenu->addAction(m_fileOpenLocationAction);
@@ -500,7 +535,7 @@ void BrowserMainWindow::setupMenu()
     m_fileMenu->addSeparator();
 
     m_fileSaveAsAction = new QAction(m_fileMenu);
-    m_fileSaveAsAction->setShortcut(QKeySequence::Save);
+//    m_fileSaveAsAction->setShortcut(QKeySequence::Save);
     connect(m_fileSaveAsAction, SIGNAL(triggered()),
             this, SLOT(fileSaveAs()));
     m_fileMenu->addAction(m_fileSaveAsAction);
@@ -523,7 +558,7 @@ void BrowserMainWindow::setupMenu()
     m_fileMenu->addAction(m_filePrintPreviewAction);
 
     m_filePrintAction = new QAction(m_fileMenu);
-    m_filePrintAction->setShortcut(QKeySequence::Print);
+//    m_filePrintAction->setShortcut(QKeySequence::Print);
     connect(m_filePrintAction, SIGNAL(triggered()),
             this, SLOT(filePrint()));
     m_fileMenu->addAction(m_filePrintAction);
@@ -538,7 +573,7 @@ void BrowserMainWindow::setupMenu()
 
     m_fileCloseWindow = new QAction(m_fileMenu);
     connect(m_fileCloseWindow, SIGNAL(triggered()), this, SLOT(close()));
-    m_fileCloseWindow->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_W));
+//    m_fileCloseWindow->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_W));
     m_fileMenu->addAction(m_fileCloseWindow);
 
     m_fileQuit = new QAction(m_fileMenu);
@@ -547,7 +582,7 @@ void BrowserMainWindow::setupMenu()
         connect(m_fileQuit, SIGNAL(triggered()), this, SLOT(close()));
     else
         connect(m_fileQuit, SIGNAL(triggered()), BrowserApplication::instance(), SLOT(quitBrowser()));
-    m_fileQuit->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
+//    m_fileQuit->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
     m_fileMenu->addAction(m_fileQuit);
 
 #if QT_VERSION >= 0x040600 && defined(Q_WS_X11)
@@ -564,45 +599,45 @@ void BrowserMainWindow::setupMenu()
     m_editMenu = new QMenu(menuBar());
     //menuBar()->addMenu(m_editMenu);
     m_editUndoAction = new QAction(m_editMenu);
-    m_editUndoAction->setShortcuts(QKeySequence::Undo);
+//    m_editUndoAction->setShortcuts(QKeySequence::Undo);
     m_tabWidget->addWebAction(m_editUndoAction, QWebPage::Undo);
     m_editMenu->addAction(m_editUndoAction);
     m_editRedoAction = new QAction(m_editMenu);
-    m_editRedoAction->setShortcuts(QKeySequence::Redo);
+//    m_editRedoAction->setShortcuts(QKeySequence::Redo);
     m_tabWidget->addWebAction(m_editRedoAction, QWebPage::Redo);
     m_editMenu->addAction(m_editRedoAction);
     m_editMenu->addSeparator();
     m_editCutAction = new QAction(m_editMenu);
-    m_editCutAction->setShortcuts(QKeySequence::Cut);
+//    m_editCutAction->setShortcuts(QKeySequence::Cut);
     m_tabWidget->addWebAction(m_editCutAction, QWebPage::Cut);
     m_editMenu->addAction(m_editCutAction);
     m_editCopyAction = new QAction(m_editMenu);
-    m_editCopyAction->setShortcuts(QKeySequence::Copy);
+//    m_editCopyAction->setShortcuts(QKeySequence::Copy);
     m_tabWidget->addWebAction(m_editCopyAction, QWebPage::Copy);
     m_editMenu->addAction(m_editCopyAction);
     m_editPasteAction = new QAction(m_editMenu);
-    m_editPasteAction->setShortcuts(QKeySequence::Paste);
+//    m_editPasteAction->setShortcuts(QKeySequence::Paste);
     m_tabWidget->addWebAction(m_editPasteAction, QWebPage::Paste);
     m_editMenu->addAction(m_editPasteAction);
     m_editSelectAllAction = new QAction(m_editMenu);
-    m_editSelectAllAction->setShortcuts(QKeySequence::SelectAll);
+//    m_editSelectAllAction->setShortcuts(QKeySequence::SelectAll);
     m_tabWidget->addWebAction(m_editSelectAllAction, QWebPage::SelectAll);
     m_editMenu->addAction(m_editSelectAllAction);
     m_editMenu->addSeparator();
 
     m_editFindAction = new QAction(m_editMenu);
-    m_editFindAction->setShortcuts(QKeySequence::Find);
+//    m_editFindAction->setShortcuts(QKeySequence::Find);
     connect(m_editFindAction, SIGNAL(triggered()), this, SLOT(editFind()));
     m_editMenu->addAction(m_editFindAction);
     new QShortcut(QKeySequence(Qt::Key_Slash), this, SLOT(editFind()));
 
     m_editFindNextAction = new QAction(m_editMenu);
-    m_editFindNextAction->setShortcuts(QKeySequence::FindNext);
+//    m_editFindNextAction->setShortcuts(QKeySequence::FindNext);
     connect(m_editFindNextAction, SIGNAL(triggered()), this, SLOT(editFindNext()));
     m_editMenu->addAction(m_editFindNextAction);
 
     m_editFindPreviousAction = new QAction(m_editMenu);
-    m_editFindPreviousAction->setShortcuts(QKeySequence::FindPrevious);
+//    m_editFindPreviousAction->setShortcuts(QKeySequence::FindPrevious);
     connect(m_editFindPreviousAction, SIGNAL(triggered()), this, SLOT(editFindPrevious()));
     m_editMenu->addAction(m_editFindPreviousAction);
 
@@ -623,7 +658,7 @@ void BrowserMainWindow::setupMenu()
     //menuBar()->addMenu(m_viewMenu);
 
     m_viewShowMenuBarAction = new QAction(m_viewMenu);
-    m_viewShowMenuBarAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
+//    m_viewShowMenuBarAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_M));
     connect(m_viewShowMenuBarAction, SIGNAL(triggered()), this, SLOT(viewMenuBar()));
     addAction(m_viewShowMenuBarAction);
 
@@ -650,7 +685,7 @@ void BrowserMainWindow::setupMenu()
     QList<QKeySequence> shortcuts;
     shortcuts.append(QKeySequence(Qt::CTRL | Qt::Key_Period));
     shortcuts.append(Qt::Key_Escape);
-    m_viewStopAction->setShortcuts(shortcuts);
+//    m_viewStopAction->setShortcuts(shortcuts);
     m_tabWidget->addWebAction(m_viewStopAction, QWebPage::Stop);
     m_viewMenu->addAction(m_viewStopAction);
 
@@ -658,7 +693,7 @@ void BrowserMainWindow::setupMenu()
     shortcuts.clear();
     shortcuts.append(QKeySequence(Qt::CTRL | Qt::Key_R));
     shortcuts.append(QKeySequence(Qt::Key_F5));
-    m_viewReloadAction->setShortcuts(shortcuts);
+//    m_viewReloadAction->setShortcuts(shortcuts);
     m_tabWidget->addWebAction(m_viewReloadAction, QWebPage::Reload);
     m_viewMenu->addAction(m_viewReloadAction);
 
@@ -666,13 +701,13 @@ void BrowserMainWindow::setupMenu()
     shortcuts.clear();
     shortcuts.append(QKeySequence(Qt::CTRL | Qt::Key_Plus));
     shortcuts.append(QKeySequence(Qt::CTRL | Qt::Key_Equal));
-    m_viewZoomInAction->setShortcuts(shortcuts);
+//    m_viewZoomInAction->setShortcuts(shortcuts);
     connect(m_viewZoomInAction, SIGNAL(triggered()),
             this, SLOT(zoomIn()));
     m_viewMenu->addAction(m_viewZoomInAction);
 
     m_viewZoomNormalAction = new QAction(m_viewMenu);
-    m_viewZoomNormalAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_0));
+//    m_viewZoomNormalAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_0));
     connect(m_viewZoomNormalAction, SIGNAL(triggered()),
             this, SLOT(zoomNormal()));
     m_viewMenu->addAction(m_viewZoomNormalAction);
@@ -681,7 +716,7 @@ void BrowserMainWindow::setupMenu()
     shortcuts.clear();
     shortcuts.append(QKeySequence(Qt::CTRL | Qt::Key_Minus));
     shortcuts.append(QKeySequence(Qt::CTRL | Qt::Key_Underscore));
-    m_viewZoomOutAction->setShortcuts(shortcuts);
+//    m_viewZoomOutAction->setShortcuts(shortcuts);
     connect(m_viewZoomOutAction, SIGNAL(triggered()),
             this, SLOT(zoomOut()));
     m_viewMenu->addAction(m_viewZoomOutAction);
@@ -695,7 +730,7 @@ void BrowserMainWindow::setupMenu()
     m_viewMenu->addAction(m_viewZoomTextOnlyAction);
 
     m_viewFullScreenAction = new QAction(m_viewMenu);
-    m_viewFullScreenAction->setShortcut(Qt::Key_F11);
+//    m_viewFullScreenAction->setShortcut(Qt::Key_F11);
     connect(m_viewFullScreenAction, SIGNAL(triggered(bool)),
             this, SLOT(viewFullScreen(bool)));
     m_viewFullScreenAction->setCheckable(true);
@@ -742,21 +777,21 @@ void BrowserMainWindow::setupMenu()
 
     m_historyBackAction = new QAction(this);
     m_tabWidget->addWebAction(m_historyBackAction, QWebPage::Back);
-    m_historyBackAction->setShortcuts(QKeySequence::Back);
+//    m_historyBackAction->setShortcuts(QKeySequence::Back);
 #if QT_VERSION < 0x040600 || (QT_VERSION >= 0x040600 && !defined(Q_WS_X11))
     m_historyBackAction->setIconVisibleInMenu(false);
 #endif
 
     m_historyForwardAction = new QAction(this);
     m_tabWidget->addWebAction(m_historyForwardAction, QWebPage::Forward);
-    m_historyForwardAction->setShortcuts(QKeySequence::Forward);
+//    m_historyForwardAction->setShortcuts(QKeySequence::Forward);
 #if QT_VERSION < 0x040600 || (QT_VERSION >= 0x040600 && !defined(Q_WS_X11))
     m_historyForwardAction->setIconVisibleInMenu(false);
 #endif
 
     m_historyHomeAction = new QAction(this);
     connect(m_historyHomeAction, SIGNAL(triggered()), this, SLOT(goHome()));
-    m_historyHomeAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_H));
+//    m_historyHomeAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_H));
 
     m_historyRestoreLastSessionAction = new QAction(this);
     connect(m_historyRestoreLastSessionAction, SIGNAL(triggered()),
@@ -783,7 +818,7 @@ void BrowserMainWindow::setupMenu()
     //menuBar()->addMenu(m_bookmarksMenu);
 
     m_bookmarksShowAllAction = new QAction(this);
-    m_bookmarksShowAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
+//    m_bookmarksShowAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
     connect(m_bookmarksShowAllAction, SIGNAL(triggered()),
             this, SLOT(showBookmarksDialog()));
 
@@ -794,7 +829,7 @@ void BrowserMainWindow::setupMenu()
 #endif
     connect(m_bookmarksAddAction, SIGNAL(triggered()),
             this, SLOT(addBookmark()));
-    m_bookmarksAddAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
+//    m_bookmarksAddAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
 
     m_bookmarksAddFolderAction = new QAction(this);
     connect(m_bookmarksAddFolderAction, SIGNAL(triggered()),
@@ -973,9 +1008,9 @@ void BrowserMainWindow::retranslate()
     m_editFindPreviousAction->setText(tr("Find P&revious"));
 
     m_viewMenu->setTitle(tr("&View"));
-    m_viewToolbarAction->setShortcut(tr("Ctrl+|"));
-    m_viewBookmarkBarAction->setShortcut(tr("Alt+Ctrl+B"));
-    m_viewStatusbarAction->setShortcut(tr("Ctrl+/"));
+//    m_viewToolbarAction->setShortcut(tr("Ctrl+|"));
+//    m_viewBookmarkBarAction->setShortcut(tr("Alt+Ctrl+B"));
+//    m_viewStatusbarAction->setShortcut(tr("Ctrl+/"));
     m_viewShowMenuBarAction->setText(tr("Show Menu Bar"));
     m_viewReloadAction->setText(tr("&Reload Page"));
     m_viewStopAction->setText(tr("&Stop"));
@@ -984,7 +1019,7 @@ void BrowserMainWindow::retranslate()
     m_viewZoomOutAction->setText(tr("Zoom &Out"));
     m_viewZoomTextOnlyAction->setText(tr("Zoom &Text Only"));
     m_viewSourceAction->setText(tr("Page S&ource"));
-    m_viewSourceAction->setShortcut(tr("Ctrl+Alt+U"));
+//    m_viewSourceAction->setShortcut(tr("Ctrl+Alt+U"));
     m_viewFullScreenAction->setText(tr("&Full Screen"));
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     m_viewTextEncodingAction->setText(tr("Text Encoding"));
@@ -1005,12 +1040,12 @@ void BrowserMainWindow::retranslate()
 
     m_toolsMenu->setTitle(tr("&Tools"));
     m_toolsWebSearchAction->setText(tr("Web &Search"));
-    m_toolsWebSearchAction->setShortcut(QKeySequence(tr("Ctrl+K", "Web Search")));
+//    m_toolsWebSearchAction->setShortcut(QKeySequence(tr("Ctrl+K", "Web Search")));
     m_toolsClearPrivateDataAction->setText(tr("&Clear Private Data"));
-    m_toolsClearPrivateDataAction->setShortcut(QKeySequence(tr("Ctrl+Shift+Delete", "Clear Private Data")));
+//    m_toolsClearPrivateDataAction->setShortcut(QKeySequence(tr("Ctrl+Shift+Delete", "Clear Private Data")));
     m_toolsEnableInspectorAction->setText(tr("Enable Web &Inspector"));
     m_toolsPreferencesAction->setText(tr("Options..."));
-    m_toolsPreferencesAction->setShortcut(tr("Ctrl+,"));
+//    m_toolsPreferencesAction->setShortcut(tr("Ctrl+,"));
     m_toolsSearchManagerAction->setText(tr("Configure Search Engines..."));
     m_toolsUserAgentMenu->setTitle(tr("User Agent"));
     m_adBlockDialogAction->setText(tr("&Ad Block..."));

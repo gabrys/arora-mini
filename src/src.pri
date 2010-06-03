@@ -54,6 +54,7 @@ HEADERS += \
     settings.h \
     sourcehighlighter.h \
     sourceviewer.h \
+    squarehboxlayout.h \
     tabbar.h \
     tabwidget.h \
     toolbarsearch.h \
@@ -83,6 +84,7 @@ SOURCES += \
     settings.cpp \
     sourcehighlighter.cpp \
     sourceviewer.cpp \
+    squarehboxlayout.cpp \
     tabbar.cpp \
     tabwidget.cpp \
     toolbarsearch.cpp \
