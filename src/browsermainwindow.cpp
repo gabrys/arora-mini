@@ -123,7 +123,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     , m_tabWidget(new TabWidget(this))
     , m_autoSaver(new AutoSaver(this))
     , m_statusBarHideTimer(0)
-    , m_statusBarMessageTimeout(1000)
+    , m_statusBarMessageTimeout(10000)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
     statusBar()->setSizeGripEnabled(true);
@@ -811,27 +811,31 @@ void BrowserMainWindow::setupMenu()
 
     // Bookmarks
     m_bookmarksMenu = new BookmarksMenuBarMenu(this);
+/*
     connect(m_bookmarksMenu, SIGNAL(openUrl(const QUrl&, const QString &)),
             m_tabWidget, SLOT(loadUrlFromUser(const QUrl&, const QString&)));
     connect(m_bookmarksMenu, SIGNAL(openUrl(const QUrl&, TabWidget::OpenUrlIn, const QString&)),
             m_tabWidget, SLOT(loadUrl(const QUrl&, TabWidget::OpenUrlIn, const QString&)));
-    //menuBar()->addMenu(m_bookmarksMenu);
-
+    menuBar()->addMenu(m_bookmarksMenu);
+*/
     m_bookmarksShowAllAction = new QAction(this);
-//    m_bookmarksShowAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
+/*
+    m_bookmarksShowAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_B));
     connect(m_bookmarksShowAllAction, SIGNAL(triggered()),
             this, SLOT(showBookmarksDialog()));
-
+*/
     m_bookmarksAddAction = new QAction(this);
+/*
     m_bookmarksAddAction->setIcon(QIcon(QLatin1String(":addbookmark.png")));
 #if QT_VERSION < 0x040600 || (QT_VERSION >= 0x040600 && !defined(Q_WS_X11))
     m_bookmarksAddAction->setIconVisibleInMenu(false);
 #endif
     connect(m_bookmarksAddAction, SIGNAL(triggered()),
             this, SLOT(addBookmark()));
-//    m_bookmarksAddAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
-
+    m_bookmarksAddAction->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_D));
+*/
     m_bookmarksAddFolderAction = new QAction(this);
+/*
     connect(m_bookmarksAddFolderAction, SIGNAL(triggered()),
             this, SLOT(addBookmarkFolder()));
 
@@ -846,7 +850,7 @@ void BrowserMainWindow::setupMenu()
     m_bookmarksAddFolderAction->setIcon(QIcon::fromTheme(QLatin1String("folder-new")));
     m_bookmarksShowAllAction->setIcon(QIcon::fromTheme(QLatin1String("user-bookmarks")));
 #endif
-
+*/
     // Window
     m_windowMenu = new QMenu(menuBar());
     //menuBar()->addMenu(m_windowMenu);

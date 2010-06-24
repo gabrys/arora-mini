@@ -108,10 +108,12 @@ WebPage::WebPage(QObject *parent)
     setNetworkAccessManager(networkManagerProxy);
     connect(this, SIGNAL(unsupportedContent(QNetworkReply *)),
             this, SLOT(handleUnsupportedContent(QNetworkReply *)));
+/*
     connect(this, SIGNAL(frameCreated(QWebFrame *)),
             this, SLOT(addExternalBinding(QWebFrame *)));
     addExternalBinding(mainFrame());
     loadSettings();
+*/
 }
 
 WebPage::~WebPage()
@@ -307,12 +309,15 @@ bool WebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &r
 
 void WebPage::loadSettings()
 {
+/*
     QSettings settings;
     settings.beginGroup(QLatin1String("tabs"));
     m_openTargetBlankLinksIn = (TabWidget::OpenUrlIn)settings.value(QLatin1String("openTargetBlankLinksIn"),
                                                                     TabWidget::NewSelectedTab).toInt();
     settings.endGroup();
     s_userAgent = settings.value(QLatin1String("userAgent")).toString();
+*/
+    s_userAgent = QLatin1String("Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+ (KHTML, like Gecko) Safari/419.3");
 }
 
 QWebPage *WebPage::createWindow(QWebPage::WebWindowType type)

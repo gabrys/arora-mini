@@ -109,7 +109,7 @@ WebView::WebView(QWidget *parent)
     , m_enableFingerScrolling(true)
     , m_page(new WebPage(this))
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
-    , m_enableAccessKeys(true)
+    , m_enableAccessKeys(false)
     , m_accessKeysPressed(false)
 #endif
 {
@@ -155,6 +155,7 @@ WebView::WebView(QWidget *parent)
 
 void WebView::loadSettings()
 {
+/*
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     QSettings settings;
     settings.beginGroup(QLatin1String("WebView"));
@@ -163,8 +164,11 @@ void WebView::loadSettings()
     if (!m_enableAccessKeys)
         hideAccessKeys();
 #endif
-    m_enableFingerScrolling = settings.value(QLatin1String("enableAccessKeys"), m_enableFingerScrolling).toBool();
+    QSettings settings;
+    settings.beginGroup(QLatin1String("WebView"));
+    m_enableFingerScrolling = settings.value(QLatin1String("enableFingerScrolling"), m_enableFingerScrolling).toBool();
     m_page->loadSettings();
+*/
 }
 
 #if !(QT_VERSION >= 0x040600)
@@ -519,6 +523,7 @@ void WebView::addSearchEngine()
 void WebView::setProgress(int progress)
 {
     m_progress = progress;
+    applyZoom();
 }
 
 int WebView::levelForZoom(int zoom)
@@ -551,7 +556,8 @@ void WebView::applyZoom()
 
 void WebView::zoomIn()
 {
-    int i = levelForZoom(m_currentZoom);
+    int i = levelForZoom(zoomFactor() * 100);
+    //int i = levelForZoom(m_currentZoom);
 
     if (i < m_zoomLevels.count() - 1)
         m_currentZoom = m_zoomLevels[i + 1];
@@ -560,7 +566,8 @@ void WebView::zoomIn()
 
 void WebView::zoomOut()
 {
-    int i = levelForZoom(m_currentZoom);
+    int i = levelForZoom(zoomFactor() * 100);
+    //int i = levelForZoom(m_currentZoom);
 
     if (i > 0)
         m_currentZoom = m_zoomLevels[i - 1];

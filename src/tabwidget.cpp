@@ -954,6 +954,7 @@ void TabWidget::loadUrl(const QUrl &url, OpenUrlIn tab, const QString &title)
 WebView *TabWidget::getView(OpenUrlIn tab, WebView *currentView)
 {
     WebView *webView = 0;
+    /*
     switch (tab) {
         case NewWindow: {
 #ifdef USERMODIFIEDBEHAVIOR_DEBUG
@@ -987,12 +988,15 @@ WebView *TabWidget::getView(OpenUrlIn tab, WebView *currentView)
 #ifdef USERMODIFIEDBEHAVIOR_DEBUG
             qDebug() << __FUNCTION__ << "CurrentTab";
 #endif
+    */
             webView = currentView;
             if (!webView)
-                return 0;
+                webView = makeNewTab(true);
             webView->setFocus();
+/*
             break;
     }
+*/
     return webView;
 }
 
@@ -1054,6 +1058,7 @@ QByteArray TabWidget::saveState() const
 
 bool TabWidget::restoreState(const QByteArray &state)
 {
+/*
     int version = 1;
     QByteArray sd = state;
     QDataStream stream(&sd, QIODevice::ReadOnly);
@@ -1092,11 +1097,13 @@ bool TabWidget::restoreState(const QByteArray &state)
 #endif
 
     }
+*/
     return true;
 }
 
 void TabWidget::createTab(const QByteArray &historyState, TabWidget::OpenUrlIn tab)
 {
+/*
 #if QT_VERSION >= 0x040600
     if (WebView *webView = getView(tab, currentWebView())) {
         QDataStream historyStream(historyState);
@@ -1107,5 +1114,6 @@ void TabWidget::createTab(const QByteArray &historyState, TabWidget::OpenUrlIn t
     Q_UNUSED(historyState);
     Q_UNUSED(tab);
 #endif
+*/
 }
 

@@ -377,17 +377,19 @@ void BrowserApplication::loadSettings()
     defaultSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, settings.value(QLatin1String("enableInspector"), false).toBool());
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     defaultSettings->setAttribute(QWebSettings::DnsPrefetchEnabled, true);
-    defaultSettings->setAttribute(QWebSettings::FrameFlatteningEnabled, true);
+    //defaultSettings->setAttribute(QWebSettings::FrameFlatteningEnabled, true); -- broken so far
 #endif
 
 /*
     QUrl url = settings.value(QLatin1String("userStyleSheet")).toUrl();
     defaultSettings->setUserStyleSheetUrl(url);
 */
-    QUrl url(QLatin1String("file:///tmp/style.css"));
+    //QUrl url(QLatin1String("qrc:/startpage.css"));
+    //QUrl url(QLatin1String("data:text/css;charset=utf-8;base64,cCB7IGJhY2tncm91bmQtY29sb3I6IHJlZCB9Ow==;"));
+    QUrl url(QLatin1String("file:///home/quake/git/arora-mini/style.css"));
     defaultSettings->setUserStyleSheetUrl(url);
 
-    int maximumPagesInCache = settings.value(QLatin1String("maximumPagesInCache"), 3).toInt();
+    int maximumPagesInCache = settings.value(QLatin1String("maximumPagesInCache"), 10).toInt();
     QWebSettings::globalSettings()->setMaximumPagesInCache(maximumPagesInCache);
 
     settings.endGroup();

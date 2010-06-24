@@ -14,6 +14,6 @@ bool SquareHBoxLayout::hasHeightForWidth() const
 
 int SquareHBoxLayout::heightForWidth(int w) const
 {
-    return w / 4;
+    return qMin(100, w / 4);
 }
 
