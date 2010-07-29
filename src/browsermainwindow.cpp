@@ -185,10 +185,10 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     QWidget *miniMenu = new QWidget(this);
     QHBoxLayout *miniMenuLayout = new SquareHBoxLayout();
     miniMenuLayout->setSpacing(1);
-    QPushButton *backButton = new QPushButton(QLatin1String("back"));
-    QPushButton *zoomInButton = new QPushButton(QLatin1String("zoom in"));
-    QPushButton *zoomOutButton = new QPushButton(QLatin1String("zoom out"));
-    QPushButton *pagesButton = new QPushButton(QLatin1String("pages"));
+    QPushButton *backButton = new QPushButton(QPixmap(QLatin1String(":/graphics/back.png")), QLatin1String(""));
+    QPushButton *zoomInButton = new QPushButton(QPixmap(QLatin1String(":/graphics/zoom-in.png")), QLatin1String(""));
+    QPushButton *zoomOutButton = new QPushButton(QPixmap(QLatin1String(":/graphics/zoom-out.png")), QLatin1String(""));
+    QPushButton *pagesButton = new QPushButton(QPixmap(QLatin1String(":/graphics/go-home.png")), QLatin1String(""));
     backButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     zoomInButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     zoomOutButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -197,16 +197,6 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     connect(zoomInButton, SIGNAL(clicked()), this, SLOT(zoomIn()));
     connect(zoomOutButton, SIGNAL(clicked()), this, SLOT(zoomOut()));
     connect(pagesButton, SIGNAL(clicked()), this, SLOT(goHome()));
-#if QT_VERSION >= 0x040600
-    backButton->setIcon(QIcon::fromTheme(QLatin1String("back")));
-    backButton->setText(QLatin1String(""));
-    zoomInButton->setIcon(QIcon::fromTheme(QLatin1String("zoom-in")));
-    zoomInButton->setText(QLatin1String(""));
-    zoomOutButton->setIcon(QIcon::fromTheme(QLatin1String("zoom-out")));
-    zoomOutButton->setText(QLatin1String(""));
-    pagesButton->setIcon(QIcon::fromTheme(QLatin1String("up")));
-    pagesButton->setText(QLatin1String(""));
-#endif
     miniMenuLayout->addWidget(backButton);
     miniMenuLayout->addWidget(zoomInButton);
     miniMenuLayout->addWidget(zoomOutButton);
@@ -1470,10 +1460,7 @@ void BrowserMainWindow::viewPageSource()
 
 void BrowserMainWindow::goHome()
 {
-    QSettings settings;
-    settings.beginGroup(QLatin1String("MainWindow"));
-    QString home = settings.value(QLatin1String("home"), QLatin1String("about:home")).toString();
-    tabWidget()->loadString(home);
+    tabWidget()->loadString(QLatin1String("about:home"));
 }
 
 void BrowserMainWindow::webSearch()
