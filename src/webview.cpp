@@ -79,6 +79,7 @@
 #include "opensearchmanager.h"
 #include "toolbarsearch.h"
 #include "webpage.h"
+#include "arorastyle.h"
 
 #include <qclipboard.h>
 #include <qdebug.h>
@@ -138,9 +139,10 @@ WebView::WebView(QWidget *parent)
     setAcceptDrops(true);
 
     // the zoom values (in percent) are chosen to be like in Mozilla Firefox 3
-    m_zoomLevels << 30 << 50 << 67 << 80 << 90;
+    m_zoomLevels << 40 << 50 << 65 << 80;
     m_zoomLevels << 100;
-    m_zoomLevels << 110 << 120 << 133 << 150 << 170 << 200 << 240 << 300;
+    m_zoomLevels << 125 << 160 << 200;
+/*
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     connect(m_page, SIGNAL(loadStarted()),
             this, SLOT(hideAccessKeys()));
@@ -148,6 +150,7 @@ WebView::WebView(QWidget *parent)
             this, SLOT(hideAccessKeys()));
 #endif
     loadSettings();
+*/
     if (m_enableFingerScrolling) {
         flickcharm.activateOn(this);
     }
@@ -222,9 +225,9 @@ TabWidget *WebView::tabWidget() const
     return 0;
 }
 
+/*
 void WebView::contextMenuEvent(QContextMenuEvent *event)
 {
-    /*
     QMenu *menu = new QMenu(this);
 
     QWebHitTestResult r = page()->mainFrame()->hitTestContent(event->pos());
@@ -314,7 +317,6 @@ void WebView::contextMenuEvent(QContextMenuEvent *event)
         return;
     }
     delete menu;
-    */
     QWebView::contextMenuEvent(event);
 }
 
@@ -330,15 +332,19 @@ void WebView::wheelEvent(QWheelEvent *event)
     }
     QWebView::wheelEvent(event);
 }
+*/
 
 void WebView::resizeEvent(QResizeEvent *event)
 {
+/*
     int offset = event->size().height() - event->oldSize().height();
     int currentValue = page()->mainFrame()->scrollBarValue(Qt::Vertical);
     setUpdatesEnabled(false);
     page()->mainFrame()->setScrollBarValue(Qt::Vertical, currentValue - offset);
     setUpdatesEnabled(true);
+*/
     QWebView::resizeEvent(event);
+    applyZoom();
 }
 
 void WebView::downloadLinkToDisk()
@@ -426,6 +432,7 @@ void WebView::searchRequested(QAction *action)
     }
 }
 
+/*
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
 void WebView::addSearchEngine()
 {
@@ -519,6 +526,7 @@ void WebView::addSearchEngine()
     ToolbarSearch::openSearchManager()->addEngine(engine);
 }
 #endif
+*/
 
 void WebView::setProgress(int progress)
 {
@@ -552,6 +560,22 @@ int WebView::levelForZoom(int zoom)
 void WebView::applyZoom()
 {
     setZoomFactor(qreal(m_currentZoom) / 100.0);
+
+    // calculate roughly width of maximum fully visible element with current zoom factor
+    int pageWidth = geometry().width() * 100 / m_currentZoom;
+
+    // take the most accurate value from precalculated ones;
+    const char *js;
+    if (pageWidth > 1100) js = ARORA_STYLE_WIDTH_1200;
+    else if (pageWidth > 860) js = ARORA_STYLE_WIDTH_960;
+    else if (pageWidth > 670) js = ARORA_STYLE_WIDTH_740;
+    else if (pageWidth > 540) js = ARORA_STYLE_WIDTH_600;
+    else if (pageWidth > 430) js = ARORA_STYLE_WIDTH_480;
+    else if (pageWidth > 340) js = ARORA_STYLE_WIDTH_385;
+    else if (pageWidth > 270) js = ARORA_STYLE_WIDTH_300;
+    else js = ARORA_STYLE_WIDTH_240;
+
+    page()->mainFrame()->evaluateJavaScript(QLatin1String(js));
 }
 
 void WebView::zoomIn()
@@ -620,6 +644,7 @@ QUrl WebView::url() const
     return m_initialUrl;
 }
 
+/*
 void WebView::mousePressEvent(QMouseEvent *event)
 {
     BrowserApplication::instance()->setEventMouseButtons(event->buttons());
@@ -693,6 +718,7 @@ void WebView::mouseReleaseEvent(QMouseEvent *event)
     }
     event->setAccepted(isAccepted);
 }
+*/
 
 void WebView::setStatusBarText(const QString &string)
 {
@@ -704,6 +730,7 @@ void WebView::downloadRequested(const QNetworkRequest &request)
     BrowserApplication::downloadManager()->download(request);
 }
 
+/*
 void WebView::keyPressEvent(QKeyEvent *event)
 {
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
@@ -750,6 +777,7 @@ void WebView::keyPressEvent(QKeyEvent *event)
 }
 
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
+
 void WebView::accessKeyShortcut()
 {
     if (!hasFocus()
@@ -922,3 +950,4 @@ void WebView::makeAccessKeyLabel(const QChar &accessKey, const QWebElement &elem
 }
 
 #endif
+*/

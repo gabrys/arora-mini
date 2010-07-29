@@ -6,7 +6,9 @@
 <title>Arora Mini</title>
 <script type="text/javascript">
 
-search = function(form) {
+HomePage = {};
+
+HomePage.goToUrlOrFalse = function(form) {
     var q = "" + form.q.value;
     if (q.match(/^ *(https?:.*|www\..*|[a-zA-Z0-9]+\.[a-zA-Z0-9]+(\..*|\/.*|)) *$/)) {
         q = q.replace(/^ */, "");
@@ -17,14 +19,30 @@ search = function(form) {
         location.href = q
         return false;
     }
-}
+};
+
+HomePage.onLoad = function() {
+    document.getElementById("hot-pages").innerHTML = external.HotPagesHTML();
+    document.getElementById("homepage-body").style.visibility = 'visible';
+    document.getElementById("search-input").focus();
+};
 
 </script>
+<style type="text/css">
+
+body {
+    background: #cacaca;
+}
+
+</style>
 </head>
-<body>
-    <form method="GET" action="http://www.google.com/m/search" onsubmit="return search(this)">
-        <input type="text" name="q"/>
-        <input type="submit" name="Search"/>
+<body id="homepage-body" style="visibility: hidden" onload="HomePage.onLoad();">
+    <form method="GET" action="http://www.google.com/m/search" onsubmit="return HomePage.goToUrlOrFalse(this)">
+        <input id="search-input" type="text" name="q"/>
+        <input type="reset" value="Clear"/>
+        <input type="submit" value="Go"/>
     </form>
+    <div id="hot-pages">
+    </div>
 </body>
 </html>

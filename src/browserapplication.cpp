@@ -378,19 +378,14 @@ void BrowserApplication::loadSettings()
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     defaultSettings->setAttribute(QWebSettings::DnsPrefetchEnabled, true);
     //defaultSettings->setAttribute(QWebSettings::FrameFlatteningEnabled, true); -- broken so far
+    //defaultSettings->setAttribute(QWebSettings::SpatialNavigationEnabled, true); -- not yet tested and not useful for Neo
 #endif
 
 /*
     QUrl url = settings.value(QLatin1String("userStyleSheet")).toUrl();
     defaultSettings->setUserStyleSheetUrl(url);
 */
-    //QUrl url(QLatin1String("qrc:/startpage.css"));
-    //QUrl url(QLatin1String("data:text/css;charset=utf-8;base64,cCB7IGJhY2tncm91bmQtY29sb3I6IHJlZCB9Ow==;"));
-    QUrl url(QLatin1String("file:///home/quake/git/arora-mini/style.css"));
-    defaultSettings->setUserStyleSheetUrl(url);
-
-    int maximumPagesInCache = settings.value(QLatin1String("maximumPagesInCache"), 10).toInt();
-    QWebSettings::globalSettings()->setMaximumPagesInCache(maximumPagesInCache);
+    QWebSettings::globalSettings()->setMaximumPagesInCache(10);
 
     settings.endGroup();
 }

@@ -45,6 +45,9 @@ HEADERS += \
     clearbutton.h \
     downloadmanager.h \
     flickcharm.h \
+    homepagebookmarkitem.h \
+    homepagehistoryitem.h \
+    homepageitem.h \
     modelmenu.h \
     modeltoolbar.h \
     plaintexteditsearch.h \
@@ -75,6 +78,8 @@ SOURCES += \
     clearbutton.cpp \
     downloadmanager.cpp \
     flickcharm.cpp \
+    homepagebookmarkitem.cpp \
+    homepagehistoryitem.cpp \
     modelmenu.cpp \
     modeltoolbar.cpp \
     plaintexteditsearch.cpp \

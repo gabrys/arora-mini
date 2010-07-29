@@ -91,10 +91,12 @@ public:
 #endif
     void loadSettings();
 
+/*
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     void keyReleaseEvent(QKeyEvent *event);
     void focusOutEvent(QFocusEvent *event);
 #endif
+*/
 
     void loadUrl(const QUrl &url, const QString &title = QString());
     QUrl url() const;
@@ -113,15 +115,19 @@ public slots:
     void applyZoom();
 
 protected:
+/*
     void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
     void wheelEvent(QWheelEvent *event);
+*/
     void resizeEvent(QResizeEvent *event);
+/*
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dropEvent(QDropEvent *event);
     void keyPressEvent(QKeyEvent *event);
+*/
 
 private:
     int levelForZoom(int zoom);
@@ -143,11 +149,13 @@ private slots:
     void blockImage();
     void bookmarkLink();
     void searchRequested(QAction *action);
+/*
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     void addSearchEngine();
     void hideAccessKeys();
     void accessKeyShortcut();
 #endif
+*/
 
 private:
     QString m_statusBarText;

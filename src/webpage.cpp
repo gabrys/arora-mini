@@ -30,6 +30,8 @@
 #include "toolbarsearch.h"
 #include "webpluginfactory.h"
 #include "webview.h"
+#include "homepagehistoryitem.h"
+#include "homepagebookmarkitem.h"
 
 #include <qbuffer.h>
 #include <qdesktopservices.h>
@@ -38,6 +40,7 @@
 #include <qnetworkrequest.h>
 #include <qsettings.h>
 #include <qwebframe.h>
+#include <qwebhistory.h>
 
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
 #include <qwebelement.h>
@@ -49,11 +52,60 @@ QString WebPage::s_userAgent;
 JavaScriptExternalObject::JavaScriptExternalObject(QObject *parent)
     : QObject(parent)
 {
+    m_page = (QWebPage*) parent;
 }
 
 void JavaScriptExternalObject::AddSearchProvider(const QString &url)
 {
     ToolbarSearch::openSearchManager()->addEngine(QUrl(url));
+}
+
+QString JavaScriptExternalObject::HotPagesHTML()
+{
+    QString tpl = QLatin1String(
+        "<div class=\"page\">"
+            "<div class=\"title\" onclick=\"%4\">%1</div>"
+            "<div class=\"url\" onclick=\"%4\">%2</div>"
+            "<div class=\"star-%3\" onclick=\"HomePage.clickStar('%2');\"></div>"
+        "</div>"
+    );
+    QString staredYes = QLatin1String("yes");
+    QString staredNo = QLatin1String("no");
+
+    QString html = QLatin1String("");
+    QList<HomePageItem*> homePageItemList;
+
+    QList<QWebHistoryItem> history = m_page->history()->items();
+    for (int i = history.size() - 1; i >= 0; i--) {
+        if (history.at(i).url().toString() != QLatin1String("qrc:/startpage.html")) {
+            homePageItemList << new HomePageHistoryItem(1 + i - history.size(), history.at(i));
+        }
+    }
+    
+    for (int i = 0; i < homePageItemList.size(); i++) {
+        html += tpl
+            .arg(homePageItemList.at(i)->title)
+            .arg(homePageItemList.at(i)->url)
+            .arg(homePageItemList.at(i)->stared ? staredYes : staredNo)
+            .arg(homePageItemList.at(i)->action)
+        ;
+    }
+
+    for (int i = 0; i < homePageItemList.size(); i++) {
+        delete homePageItemList.at(i);
+    }
+    
+    return html;
+}
+
+void JavaScriptExternalObject::StarPage(QString url)
+{
+    
+}
+
+void JavaScriptExternalObject::DestarPage(QString url)
+{
+
 }
 
 Q_DECLARE_METATYPE(OpenSearchEngine*)
@@ -106,12 +158,15 @@ WebPage::WebPage(QObject *parent)
     networkManagerProxy->setWebPage(this);
     networkManagerProxy->setPrimaryNetworkAccessManager(BrowserApplication::networkAccessManager());
     setNetworkAccessManager(networkManagerProxy);
+    // keep the same number of pages in fast-cache and in history
+    // TODO: makes those values actually synchronized
+    history()->setMaximumItemCount(10);
     connect(this, SIGNAL(unsupportedContent(QNetworkReply *)),
             this, SLOT(handleUnsupportedContent(QNetworkReply *)));
-/*
     connect(this, SIGNAL(frameCreated(QWebFrame *)),
             this, SLOT(addExternalBinding(QWebFrame *)));
     addExternalBinding(mainFrame());
+/*
     loadSettings();
 */
 }

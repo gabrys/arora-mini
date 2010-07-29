@@ -22,9 +22,14 @@
 
 #include "webpageproxy.h"
 #include "tabwidget.h"
+#include "bookmarksmanager.h"
+#include "homepageitem.h"
 
 #include <qlist.h>
 #include <qnetworkrequest.h>
+
+#include <QWebHistoryItem>
+#include <QWebFrame>
 
 class WebPageLinkedResource
 {
@@ -48,6 +53,14 @@ public:
 
 public slots:
     void AddSearchProvider(const QString &url);
+    
+    // slots to be used on home page:
+    QString HotPagesHTML();
+    void StarPage(QString url);
+    void DestarPage(QString url);
+
+private:
+    QWebPage *m_page;
 };
 
 class JavaScriptAroraObject : public QObject

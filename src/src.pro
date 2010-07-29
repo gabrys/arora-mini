@@ -21,6 +21,9 @@ DESTDIR = ../
 
 include(locale/locale.pri)
 
+SOURCES += $$system(style/generate-arorastyle-h)
+HEADERS += style/template.css style/template.js
+
 !mac {
 unix {
     INSTALLS += translations desktop iconxpm iconsvg icon16 icon32 icon128 man man-compress

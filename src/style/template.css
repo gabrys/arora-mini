@@ -1,0 +1,28 @@
+
+html > body > * * {
+    -webkit-transform: none !important;
+    -webkit-box-shadow: none !important;
+    -webkit-border-radius: 0 !important;
+    -webkit-transition-property: none !important;
+    -webkit-transition: none !important;
+    opacity: 1 !important;
+}
+
+html {
+    min-width: 980px;
+}
+
+p, ul, ol, li, td, h1, h2, h3, h4, h5, h6 {
+    max-width: %dpx;
+}
+
+* a:focus {
+    background: orange !important;
+    color: white !important;
+    outline: orange 10px solid !important;
+}
+
+canvas {
+    display: none;
+}
+
