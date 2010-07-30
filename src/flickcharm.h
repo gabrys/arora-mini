@@ -24,7 +24,25 @@
 #ifndef FLICKCHARM_H
 #define FLICKCHARM_H
 
+// maximum number of pixels moved, to still emit click
+#define FLICKCHARM_CLICK_MAX_OFFSET 12
+
 #include <QObject>
+#include <QWidget>
+#include <QList>
+#include <QPoint>
+
+struct FlickData {
+    typedef enum { Steady, Pressed, ManualScroll, AutoScroll, Stop } State;
+    State state;
+    QWidget *widget;
+    QPoint pressPos;
+    QPoint offset;
+    QPoint dragPos;
+    QPoint speed;
+    QPoint totalDelta;
+    QList<QEvent*> ignored;
+};
 
 class FlickCharmPrivate;
 class QWidget;
@@ -44,6 +62,7 @@ protected:
 
 private:
     FlickCharmPrivate *d;
+    void emitClick(QObject *object, FlickData *data);
 };
 
 #endif // FLICKCHARM_H

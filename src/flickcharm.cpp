@@ -36,17 +36,6 @@
 
 #include <QDebug>
 
-struct FlickData {
-    typedef enum { Steady, Pressed, ManualScroll, AutoScroll, Stop } State;
-    State state;
-    QWidget *widget;
-    QPoint pressPos;
-    QPoint offset;
-    QPoint dragPos;
-    QPoint speed;
-    QList<QEvent*> ignored;
-};
-
 class FlickCharmPrivate
 {
 public:
@@ -209,22 +198,14 @@ bool FlickCharm::eventFilter(QObject *object, QEvent *event)
     case FlickData::Pressed:
         if (mouseEvent->type() == QEvent::MouseButtonRelease) {
             consumed = true;
+            emitClick(object, data);
             data->state = FlickData::Steady;
-
-            QMouseEvent *event1 = new QMouseEvent(QEvent::MouseButtonPress,
-                                                  data->pressPos, Qt::LeftButton,
-                                                  Qt::LeftButton, Qt::NoModifier);
-            QMouseEvent *event2 = new QMouseEvent(*mouseEvent);
-
-            data->ignored << event1;
-            data->ignored << event2;
-            QApplication::postEvent(object, event1);
-            QApplication::postEvent(object, event2);
         }
         if (mouseEvent->type() == QEvent::MouseMove) {
             consumed = true;
             data->state = FlickData::ManualScroll;
             data->dragPos = QCursor::pos();
+            data->totalDelta = QPoint(0, 0);
             if (!d->ticker.isActive())
                 d->ticker.start(20, this);
         }
@@ -234,11 +215,17 @@ bool FlickCharm::eventFilter(QObject *object, QEvent *event)
         if (mouseEvent->type() == QEvent::MouseMove) {
             consumed = true;
             QPoint delta = mouseEvent->pos() - data->pressPos;
+            data->totalDelta += delta;
             setScrollOffset(data->widget, data->offset - delta);
         }
         if (mouseEvent->type() == QEvent::MouseButtonRelease) {
             consumed = true;
-            data->state = FlickData::AutoScroll;
+            if (data->totalDelta.x() + data->totalDelta.y() < FLICKCHARM_CLICK_MAX_OFFSET) {
+                emitClick(object, data);
+            } else {
+                data->state = FlickData::AutoScroll;
+            }
+            data->state = FlickData::Steady;
         }
         break;
 
@@ -306,4 +293,19 @@ void FlickCharm::timerEvent(QTimerEvent *event)
         d->ticker.stop();
 
     QObject::timerEvent(event);
+}
+
+void FlickCharm::emitClick(QObject *object, FlickData *data)
+{
+    QMouseEvent *event1 = new QMouseEvent(QEvent::MouseButtonPress,
+                                          data->pressPos, Qt::LeftButton,
+                                          Qt::LeftButton, Qt::NoModifier);
+    QMouseEvent *event2 = new QMouseEvent(QEvent::MouseButtonRelease,
+                                          data->pressPos, Qt::LeftButton,
+                                          Qt::LeftButton, Qt::NoModifier);
+
+    data->ignored << event1;
+    data->ignored << event2;
+    QApplication::postEvent(object, event1);
+    QApplication::postEvent(object, event2);
 }
