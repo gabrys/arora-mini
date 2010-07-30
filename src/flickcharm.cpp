@@ -132,8 +132,8 @@ static QPoint scrollOffset(QWidget *widget)
     QWebView *webView = dynamic_cast<QWebView*>(widget);
     if (webView) {
         QWebFrame *frame = webView->page()->mainFrame();
-        x = frame->evaluateJavaScript(QString::fromAscii("window.scrollX")).toInt();
-        y = frame->evaluateJavaScript(QString::fromAscii("window.scrollY")).toInt();
+        x = frame->scrollPosition().x();
+        y = frame->scrollPosition().y();
     }
 
     return QPoint(x, y);
@@ -148,9 +148,8 @@ static void setScrollOffset(QWidget *widget, const QPoint &p)
     }
 
     QWebView *webView = dynamic_cast<QWebView*>(widget);
-    QWebFrame *frame = webView ? webView->page()->mainFrame() : 0;
-    if (frame)
-        frame->evaluateJavaScript(QString::fromAscii("window.scrollTo(%1,%2);").arg(p.x()).arg(p.y()));
+    if (webView)
+        webView->page()->mainFrame()->setScrollPosition(p);
 }
 
 static QPoint deaccelerate(const QPoint &speed, int a = 1, int max = 64)
