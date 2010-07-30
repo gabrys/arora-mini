@@ -1,4 +1,5 @@
 
+/* remove fancy animations */
 html > body > * * {
     -webkit-transform: none !important;
     -webkit-box-shadow: none !important;
@@ -8,21 +9,25 @@ html > body > * * {
     opacity: 1 !important;
 }
 
+/* cheat about browser window width */
 html {
     min-width: 980px;
 }
 
+/* assure text does not overflow over screen */
 p, ul, ol, li, td, h1, h2, h3, h4, h5, h6 {
     max-width: %dpx;
 }
 
+/* mark clicked links aggressively */
 * a:focus {
     background: orange !important;
     color: white !important;
     outline: orange 10px solid !important;
 }
 
-canvas {
+/* remove rich-web objects, sorry */
+canvas, object {
     display: none;
 }
 
