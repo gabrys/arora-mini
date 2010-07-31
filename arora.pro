@@ -3,7 +3,7 @@ lessThan(QT_VERSION, 4.6) {
 }
 
 TEMPLATE = subdirs
-SUBDIRS  = src tools
+SUBDIRS  = src/style src tools
 CONFIG += ordered
 
 unix {

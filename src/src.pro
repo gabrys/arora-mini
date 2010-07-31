@@ -21,8 +21,7 @@ DESTDIR = ../
 
 include(locale/locale.pri)
 
-SOURCES += $$system(style/generate-arorastyle-h)
-HEADERS += style/template.css style/template.js
+HEADERS += arorastyle.h
 
 !mac {
 unix {

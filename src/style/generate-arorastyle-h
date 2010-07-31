@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
-out = open("arorastyle.h", "w")
+out = open("../arorastyle.h", "w")
 
 for width in [1200, 960, 740, 600, 480, 385, 300, 240]:
-    style = open("style/template.css").read() % (
-        width * 0.95, # max paragraph width
+    style = open("template.css").read() % (
+        width * 0.9, # max paragraph width
     )
 
     out.write('#define ARORA_STYLE_WIDTH_%d "' % width)
-    out.write(open("style/template.js").read(). \
+    out.write(open("template.js").read(). \
         replace("%%width%%", str(width)). \
         replace("%%style%%", style). \
         replace("\n", " "). \

@@ -1,4 +1,4 @@
-(function() {
+setTimeout(function() {
     var style = document.getElementById("arora-mini-style-css");
     if (! style) {
         style = document.createElement("style");
@@ -10,4 +10,4 @@
     } else if (style.className != "width-%%width") {
         style.innerHTML = '%%style%%';
     }
-})();
+}, Math.random() * 2000);
