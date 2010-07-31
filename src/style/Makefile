@@ -2,4 +2,4 @@
 	./generate-arorastyle-h
 
 clean:
-	rm ../arorastyle.h
+	rm -f ../arorastyle.h
