@@ -214,7 +214,7 @@ bool FlickCharm::eventFilter(QObject *object, QEvent *event)
         if (mouseEvent->type() == QEvent::MouseMove) {
             consumed = true;
             QPoint delta = mouseEvent->pos() - data->pressPos;
-            data->totalDelta += delta;
+            data->totalDelta += QPoint(qAbs(delta.x()), qAbs(delta.y()));
             setScrollOffset(data->widget, data->offset - delta);
         }
         if (mouseEvent->type() == QEvent::MouseButtonRelease) {
