@@ -126,19 +126,25 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     , m_statusBarMessageTimeout(10000)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
+/*
     statusBar()->setSizeGripEnabled(true);
     // fixes https://bugzilla.mozilla.org/show_bug.cgi?id=219070
     // yes, that's a Firefox bug!
     statusBar()->setLayoutDirection(Qt::LeftToRight);
+*/
     setupMenu();
     setupToolBar();
 
+/*
     m_filePrivateBrowsingAction->setChecked(BrowserApplication::isPrivate());
+*/
 
     QWidget *centralWidget = new QWidget(this);
     BookmarksModel *boomarksModel = BrowserApplication::bookmarksManager()->bookmarksModel();
     m_bookmarksToolbar = new BookmarksToolBar(boomarksModel, this);
+/*
     m_bookmarksToolbar->setObjectName(QLatin1String("BookmarksToolbar"));
+*/
     connect(m_bookmarksToolbar, SIGNAL(openUrl(const QUrl&, const QString&)),
             m_tabWidget, SLOT(loadUrlFromUser(const QUrl&, const QString&)));
     connect(m_bookmarksToolbar, SIGNAL(openUrl(const QUrl&, TabWidget::OpenUrlIn, const QString&)),
@@ -147,6 +153,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(0);
     layout->setMargin(0);
+/*
 #if defined(Q_WS_MAC)
     m_bookmarksToolbarFrame = new QFrame(this);
     m_bookmarksToolbarFrame->setLineWidth(1);
@@ -179,6 +186,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     addToolBarBreak();
     addToolBar(m_bookmarksToolbar);
 #endif
+*/
     layout->addWidget(m_tabWidget);
     
     // set up mini menu
@@ -243,6 +251,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     updateWindowTitle();
     loadDefaultState();
     m_tabWidget->newTab();
+/*
     m_tabWidget->currentLocationBar()->setFocus();
 #if defined(Q_WS_MAC)
     m_navigationBar->setIconSize(QSize(18, 18));
@@ -263,14 +272,18 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     setWindowRole(QLatin1String("browser"));
 #endif
     retranslate();
+*/
 }
 
 BrowserMainWindow::~BrowserMainWindow()
 {
+/*
     m_autoSaver->changeOccurred();
     m_autoSaver->saveIfNeccessary();
+*/
 }
 
+/*
 void BrowserMainWindow::keyPressEvent(QKeyEvent *event)
 {
     switch (event->key()) {
@@ -295,6 +308,7 @@ void BrowserMainWindow::keyPressEvent(QKeyEvent *event)
         break;
     }
 }
+*/
 
 BrowserMainWindow *BrowserMainWindow::parentWindow(QWidget *widget)
 {
@@ -320,14 +334,17 @@ void BrowserMainWindow::loadDefaultState()
 
 QSize BrowserMainWindow::sizeHint() const
 {
+/*
     QRect desktopRect = QApplication::desktop()->screenGeometry();
     QSize size = desktopRect.size() * 0.9;
-    return QSize(480, 640);
     return size;
+*/
+    return QSize(480, 640);
 }
 
 void BrowserMainWindow::save()
 {
+/*
     BrowserApplication::instance()->saveSession();
 
     QSettings settings;
@@ -335,6 +352,7 @@ void BrowserMainWindow::save()
     QByteArray data = saveState(false);
     settings.setValue(QLatin1String("defaultState"), data);
     settings.endGroup();
+*/
 }
 
 static const qint32 BrowserMainWindowMagic = 0xba;
@@ -1342,6 +1360,7 @@ void BrowserMainWindow::privacyChanged(bool isPrivate)
         tabWidget()->clear();
 }
 
+/*
 void BrowserMainWindow::closeEvent(QCloseEvent *event)
 {
     if (!BrowserApplication::instance()->allowToCloseWindow(this)) {
@@ -1386,6 +1405,7 @@ void BrowserMainWindow::mousePressEvent(QMouseEvent *event)
         break;
     }
 }
+*/
 
 void BrowserMainWindow::changeEvent(QEvent *event)
 {

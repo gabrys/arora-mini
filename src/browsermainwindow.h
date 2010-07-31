@@ -109,9 +109,11 @@ public slots:
     void zoomTextOnlyChanged(bool textOnly);
 
 protected:
+/*
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void mousePressEvent(QMouseEvent *event);
+*/
     void changeEvent(QEvent *event);
 
 private slots:

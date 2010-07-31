@@ -36,7 +36,9 @@ int main(int argc, char **argv)
 #ifdef Q_OS_WIN
     application.setStyle(new ExplorerStyle);
 #endif
+/*
     application.newMainWindow();
+*/
     return application.exec();
 }
 

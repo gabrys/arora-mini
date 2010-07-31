@@ -160,10 +160,23 @@ BrowserApplication::BrowserApplication(int &argc, char **argv)
     // because the event has to be propagated to everyone.
     setWindowIcon(QIcon(QLatin1String(":128x128/arora.png")));
 
+/*
 #ifndef AUTOTESTS
     QTimer::singleShot(0, this, SLOT(postLaunch()));
 #endif
     languageManager();
+*/
+    QWebSettings *defaultSettings = QWebSettings::globalSettings();
+    defaultSettings->setAttribute(QWebSettings::JavascriptCanOpenWindows, false);
+    defaultSettings->setAttribute(QWebSettings::JavascriptEnabled, true);
+    defaultSettings->setAttribute(QWebSettings::PluginsEnabled, true);
+    defaultSettings->setAttribute(QWebSettings::AutoLoadImages, true);
+    defaultSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, false);
+    defaultSettings->setMaximumPagesInCache(5);
+    // defaultSettings->setAttribute(QWebSettings::FrameFlatteningEnabled, true); -- broken so far
+    // defaultSettings->setAttribute(QWebSettings::SpatialNavigationEnabled, true); -- not yet tested and not useful for Neo
+
+    mainWindow()->goHome();
 }
 
 BrowserApplication::~BrowserApplication()
@@ -303,6 +316,7 @@ void BrowserApplication::quitBrowser()
  */
 void BrowserApplication::postLaunch()
 {
+/*
     QDesktopServices::StandardLocation location;
     location = QDesktopServices::CacheLocation;
     QString directory = QDesktopServices::storageLocation(location);
@@ -345,10 +359,12 @@ void BrowserApplication::postLaunch()
         }
     }
     BrowserApplication::historyManager();
+*/
 }
 
 void BrowserApplication::loadSettings()
 {
+/*
     QSettings settings;
     settings.beginGroup(QLatin1String("websettings"));
 
@@ -377,17 +393,13 @@ void BrowserApplication::loadSettings()
     defaultSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, settings.value(QLatin1String("enableInspector"), false).toBool());
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     defaultSettings->setAttribute(QWebSettings::DnsPrefetchEnabled, true);
-    //defaultSettings->setAttribute(QWebSettings::FrameFlatteningEnabled, true); -- broken so far
-    //defaultSettings->setAttribute(QWebSettings::SpatialNavigationEnabled, true); -- not yet tested and not useful for Neo
 #endif
 
-/*
     QUrl url = settings.value(QLatin1String("userStyleSheet")).toUrl();
     defaultSettings->setUserStyleSheetUrl(url);
-*/
-    QWebSettings::globalSettings()->setMaximumPagesInCache(10);
 
     settings.endGroup();
+*/
 }
 
 QList<BrowserMainWindow*> BrowserApplication::mainWindows()
