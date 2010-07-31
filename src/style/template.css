@@ -1,12 +1,13 @@
 
 /* remove fancy animations */
-html > body > * * {
+html, html > body, html > body > *, html > body > * * {
     -webkit-transform: none !important;
     -webkit-box-shadow: none !important;
     -webkit-border-radius: 0 !important;
     -webkit-transition-property: none !important;
     -webkit-transition: none !important;
     opacity: 1 !important;
+    background-attachment: scroll !important;
 }
 
 /* cheat about browser window width */
@@ -15,12 +16,12 @@ html {
 }
 
 /* assure text does not overflow over screen */
-p, ul, ol, li, td, h1, h2, h3, h4, h5, h6 {
-    max-width: %dpx;
+* > p, * > ul, * > ol, * > li, * > td, * > h1, * > h2, * > h3, * > h4, * > h5, * > h6 {
+    max-width: %dpx !important;
 }
 
 /* mark clicked links aggressively */
-* a:focus {
+* * > a:focus {
     background: orange !important;
     color: white !important;
     outline: orange 10px solid !important;
@@ -28,6 +29,6 @@ p, ul, ol, li, td, h1, h2, h3, h4, h5, h6 {
 
 /* remove rich-web objects, sorry */
 canvas, object {
-    display: none;
+    display: none !important;
 }
 
