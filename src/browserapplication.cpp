@@ -173,6 +173,7 @@ BrowserApplication::BrowserApplication(int &argc, char **argv)
     defaultSettings->setAttribute(QWebSettings::AutoLoadImages, true);
     defaultSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, false);
     defaultSettings->setMaximumPagesInCache(5);
+    defaultSettings->setAttribute(QWebSettings::TiledBackingStoreEnabled, true);
     // defaultSettings->setAttribute(QWebSettings::FrameFlatteningEnabled, true); -- broken so far
     // defaultSettings->setAttribute(QWebSettings::SpatialNavigationEnabled, true); -- not yet tested and not useful for Neo
 

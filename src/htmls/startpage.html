@@ -27,6 +27,11 @@ HomePage.onLoad = function() {
     document.getElementById("search-input").focus();
 };
 
+HomePage.clear = function() {
+    document.getElementById("search-input").focus();
+    return true;
+};
+
 </script>
 <style type="text/css">
 
@@ -39,7 +44,7 @@ body {
 <body id="homepage-body" style="visibility: hidden" onload="HomePage.onLoad();">
     <form method="GET" action="http://www.google.com/m/search" onsubmit="return HomePage.goToUrlOrFalse(this)">
         <input id="search-input" type="text" name="q"/>
-        <input type="reset" value="Clear"/>
+        <input type="reset" value="Clear" onclick="return HomePage.clear()"/>
         <input type="submit" value="Go"/>
     </form>
     <div id="hot-pages">

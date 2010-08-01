@@ -65,7 +65,9 @@
 #ifndef WEBVIEW_H
 #define WEBVIEW_H
 
-#include <qwebview.h>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QGraphicsWebView>
 
 #include "tabwidget.h"
 #include "flickcharm.h"
@@ -78,7 +80,7 @@ class QLabel;
 class BrowserMainWindow;
 class TabWidget;
 class WebPage;
-class WebView : public QWebView
+class WebView : public QGraphicsView
 {
     Q_OBJECT
 
@@ -99,7 +101,12 @@ public:
 */
 
     void loadUrl(const QUrl &url, const QString &title = QString());
+
+// proxy methods to m_webView's methods
     QUrl url() const;
+    QString title() const;
+    QWebPage *page() const;
+    QWebHistory *history() const;
 
     QString lastStatusBarText() const;
     inline int progress() const { return m_progress; }
@@ -107,12 +114,15 @@ public:
 
 signals:
     void search(const QUrl &searchUrl, TabWidget::OpenUrlIn openIn);
+    void loadProgress(int progress);
 
 public slots:
     void zoomIn();
     void zoomOut();
     void resetZoom();
     void applyZoom();
+    void setTiledBackingStoreFrozen(bool frozen);
+    void urlChangedEvent(const QUrl &url);
 
 protected:
 /*
@@ -132,6 +142,7 @@ protected:
 private:
     int levelForZoom(int zoom);
     FlickCharm flickcharm;
+    bool m_loadStarted;
 
 private slots:
     void setProgress(int progress);
@@ -149,6 +160,8 @@ private slots:
     void blockImage();
     void bookmarkLink();
     void searchRequested(QAction *action);
+    void freezeTicker();
+    void unfreezeTicker();
 /*
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     void addSearchEngine();
@@ -165,6 +178,8 @@ private:
     bool m_enableFingerScrolling;
     QList<int> m_zoomLevels;
     WebPage *m_page;
+    QGraphicsScene m_scene;
+    QGraphicsWebView m_webView;
 
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     bool m_enableAccessKeys;

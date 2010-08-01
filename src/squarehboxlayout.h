@@ -11,8 +11,8 @@ class SquareHBoxLayout : public QHBoxLayout
 
 public:
     SquareHBoxLayout(QWidget* parent = 0);
-    virtual bool hasHeightForWidth() const;
-    virtual int heightForWidth(int w) const;
+    virtual QSize sizeHint() const;
+    virtual Qt::Orientations expandingDirections() const;
 };
 
 #endif // SQUAREHBOXLAYOUT_H

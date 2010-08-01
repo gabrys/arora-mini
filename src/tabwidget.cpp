@@ -121,11 +121,13 @@ TabWidget::TabWidget(QWidget *parent)
     connect(m_tabBar, SIGNAL(loadUrl(const QUrl&, TabWidget::OpenUrlIn)),
             this, SLOT(loadUrl(const QUrl&, TabWidget::OpenUrlIn)));
     connect(m_tabBar, SIGNAL(newTab()), this, SLOT(newTab()));
+/*
     connect(m_tabBar, SIGNAL(closeTab(int)), this, SLOT(closeTab(int)));
     connect(m_tabBar, SIGNAL(cloneTab(int)), this, SLOT(cloneTab(int)));
     connect(m_tabBar, SIGNAL(closeOtherTabs(int)), this, SLOT(closeOtherTabs(int)));
     connect(m_tabBar, SIGNAL(reloadTab(int)), this, SLOT(reloadTab(int)));
     connect(m_tabBar, SIGNAL(reloadAllTabs()), this, SLOT(reloadAllTabs()));
+*/
     setTabBar(m_tabBar);
     setDocumentMode(true);
     connect(m_tabBar, SIGNAL(tabMoved(int, int)),
@@ -215,6 +217,7 @@ void TabWidget::clear()
 // When index is -1 index chooses the current tab
 void TabWidget::reloadTab(int index)
 {
+/*
     if (index < 0)
         index = currentIndex();
     if (index < 0 || index >= count())
@@ -223,6 +226,7 @@ void TabWidget::reloadTab(int index)
     if (WebView *tab = webView(index)) {
         tab->reload();
     }
+*/
 }
 
 void TabWidget::moveTab(int fromIndex, int toIndex)
@@ -465,11 +469,13 @@ void TabWidget::toolBarVisibilityChangeRequestedCheck(bool visible)
 
 void TabWidget::reloadAllTabs()
 {
+/*
     for (int i = 0; i < count(); ++i) {
         if (WebView *tab = webView(i)) {
             tab->reload();
         }
     }
+*/
 }
 
 void TabWidget::bookmarkTabs()
@@ -550,6 +556,7 @@ void TabWidget::cloneTab(int index)
 // When index is -1 index chooses the current tab
 void TabWidget::closeTab(int index)
 {
+/*
     if (index < 0)
         index = currentIndex();
     if (index < 0 || index >= count())
@@ -601,6 +608,7 @@ void TabWidget::closeTab(int index)
         currentWebView()->setFocus();
     if (count() == 0)
         emit lastTabClosed();
+*/
 }
 
 QLabel *TabWidget::animationLabel(int index, bool addMovie)

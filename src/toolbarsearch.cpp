@@ -109,6 +109,7 @@ ToolbarSearch::ToolbarSearch(QWidget *parent)
     m_completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     setCompleter(m_completer);
 
+/*
     searchButton()->setShowMenuTriangle(true);
 
     connect(searchButton(), SIGNAL(clicked()),
@@ -119,6 +120,7 @@ ToolbarSearch::ToolbarSearch(QWidget *parent)
     load();
 
     currentEngineChanged();
+*/
 }
 
 OpenSearchManager *ToolbarSearch::openSearchManager()
@@ -130,6 +132,7 @@ OpenSearchManager *ToolbarSearch::openSearchManager()
 
 void ToolbarSearch::currentEngineChanged()
 {
+/*
     OpenSearchEngine *newEngine = openSearchManager()->currentEngine();
     Q_ASSERT(newEngine);
     if (!newEngine)
@@ -150,6 +153,7 @@ void ToolbarSearch::currentEngineChanged()
     m_currentEngine = newEngine->name();
     m_suggestions.clear();
     setupList();
+*/
 }
 
 void ToolbarSearch::completerActivated(const QModelIndex &index)
@@ -295,6 +299,7 @@ void ToolbarSearch::retranslate()
 
 void ToolbarSearch::showEnginesMenu()
 {
+/*
     QMenu menu;
 
     QWidget *parent = searchButton()->parentWidget();
@@ -352,6 +357,7 @@ void ToolbarSearch::showEnginesMenu()
         menu.addAction(tr("Clear Recent Searches"), this, SLOT(clear()));
 
     menu.exec(pos);
+*/
 }
 
 void ToolbarSearch::changeCurrentEngine()

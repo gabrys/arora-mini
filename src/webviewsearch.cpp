@@ -28,10 +28,11 @@
 
 #include <qdebug.h>
 
-WebViewSearch::WebViewSearch(QWebView *webView, QWidget *parent)
+WebViewSearch::WebViewSearch(WebView *webView, QWidget *parent)
     : SearchBar(parent)
 {
     setSearchObject(webView);
+/*
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
     ui.highlightAllButton->setVisible(true);
     connect(ui.highlightAllButton, SIGNAL(toggled(bool)),
@@ -39,30 +40,38 @@ WebViewSearch::WebViewSearch(QWebView *webView, QWidget *parent)
     connect(ui.searchLineEdit, SIGNAL(textEdited(const QString &)),
             this, SLOT(highlightAll()));
 #endif
+*/
 }
 
 void WebViewSearch::findNext()
 {
+/*
     find(QWebPage::FindWrapsAroundDocument);
+*/
 }
 
 void WebViewSearch::findPrevious()
 {
+/*
     find(QWebPage::FindBackward | QWebPage::FindWrapsAroundDocument);
+*/
 }
 
 #if QT_VERSION >= 0x040600 || defined(WEBKIT_TRUNK)
 void WebViewSearch::highlightAll()
 {
+/*
     webView()->findText(QString(), QWebPage::HighlightAllOccurrences);
 
     if (ui.highlightAllButton->isChecked())
         find(QWebPage::HighlightAllOccurrences);
+*/
 }
 #endif
 
 void WebViewSearch::find(QWebPage::FindFlags flags)
 {
+/*
     QString searchString = ui.searchLineEdit->text();
     if (!searchObject() || searchString.isEmpty())
         return;
@@ -70,11 +79,12 @@ void WebViewSearch::find(QWebPage::FindFlags flags)
     if (!webView()->findText(searchString, flags))
         infoString = tr("Not Found");
     ui.searchInfo->setText(infoString);
+*/
 }
 
-QWebView *WebViewSearch::webView() const
+WebView *WebViewSearch::webView() const
 {
-    return qobject_cast<QWebView*>(searchObject());
+    return qobject_cast<WebView*>(searchObject());
 }
 
 WebViewWithSearch::WebViewWithSearch(WebView *webView, QWidget *parent)

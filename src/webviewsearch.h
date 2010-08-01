@@ -21,19 +21,16 @@
 #define WEBVIEWSEARCH_H
 
 #include "searchbar.h"
+#include "webview.h"
 
 #include <qwebpage.h>
-
-QT_BEGIN_NAMESPACE
-class QWebView;
-QT_END_NAMESPACE
 
 class WebViewSearch : public SearchBar
 {
     Q_OBJECT
 
 public:
-    WebViewSearch(QWebView *webView, QWidget *parent = 0);
+    WebViewSearch(WebView *webView, QWidget *parent = 0);
 
 public slots:
     void findNext();
@@ -44,7 +41,7 @@ public slots:
 
 private:
     void find(QWebPage::FindFlags flags);
-    QWebView *webView() const;
+    WebView *webView() const;
 };
 
 #include "webview.h"

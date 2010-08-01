@@ -104,7 +104,7 @@ Q_DECLARE_METATYPE(QWebElement)
 #include <qdebug.h>
 
 WebView::WebView(QWidget *parent)
-    : QWebView(parent)
+    : QGraphicsView(parent)
     , m_progress(0)
     , m_currentZoom(100)
     , m_enableFingerScrolling(true)
@@ -114,7 +114,15 @@ WebView::WebView(QWidget *parent)
     , m_accessKeysPressed(false)
 #endif
 {
-    setPage(m_page);
+    setScene(&m_scene);
+    setFrameShape(QFrame::NoFrame);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
+    m_scene.addItem(&m_webView);
+    m_webView.setPage(m_page);
+    m_webView.setResizesToContents(true); 
+    
 #if QT_VERSION >= 0x040600
     QPalette p;
     if (p.color(QPalette::Window) != Qt::white) {
@@ -125,16 +133,21 @@ WebView::WebView(QWidget *parent)
 #endif
     connect(page(), SIGNAL(statusBarMessage(const QString&)),
             SLOT(setStatusBarText(const QString&)));
-    connect(this, SIGNAL(loadProgress(int)),
+    connect(&m_webView, SIGNAL(loadProgress(int)),
             this, SLOT(setProgress(int)));
-    connect(this, SIGNAL(loadFinished(bool)),
+    connect(&m_webView, SIGNAL(loadStarted()),
+            this, SLOT(loadStartedEvent()));
+    connect(&m_webView, SIGNAL(loadFinished(bool)),
             this, SLOT(loadFinished()));
-    connect(page(), SIGNAL(aboutToLoadUrl(const QUrl &)),
-            this, SIGNAL(urlChanged(const QUrl &)));
+/*    connect(m_webView, SIGNAL(aboutToLoadUrl(const QUrl &)),
+            this, SIGNAL(urlChanged(const QUrl &)));*/
+    connect(&m_webView, SIGNAL(urlChanged(const QUrl &)),
+            this, SLOT(urlChangedEvent(const QUrl &)));
     connect(page(), SIGNAL(downloadRequested(const QNetworkRequest &)),
             this, SLOT(downloadRequested(const QNetworkRequest &)));
-    connect(BrowserApplication::instance(), SIGNAL(zoomTextOnlyChanged(bool)),
+/*    connect(BrowserApplication::instance(), SIGNAL(zoomTextOnlyChanged(bool)),
             this, SLOT(applyZoom()));
+*/
     page()->setForwardUnsupportedContent(true);
     setAcceptDrops(true);
 
@@ -154,6 +167,7 @@ WebView::WebView(QWidget *parent)
     if (m_enableFingerScrolling) {
         flickcharm.activateOn(this);
     }
+    freezeTicker();
 }
 
 void WebView::loadSettings()
@@ -342,19 +356,23 @@ void WebView::resizeEvent(QResizeEvent *event)
     setUpdatesEnabled(false);
     page()->mainFrame()->setScrollBarValue(Qt::Vertical, currentValue - offset);
     setUpdatesEnabled(true);
-*/
     QWebView::resizeEvent(event);
+*/
     applyZoom();
 }
 
 void WebView::downloadLinkToDisk()
 {
+/*
     pageAction(QWebPage::DownloadLinkToDisk)->trigger();
+*/
 }
 
 void WebView::copyLinkToClipboard()
 {
+/*
     pageAction(QWebPage::CopyLinkToClipboard)->trigger();
+*/
 }
 
 void WebView::openActionUrlInNewTab()
@@ -379,17 +397,23 @@ void WebView::openActionUrlInNewWindow()
 
 void WebView::openImageInNewWindow()
 {
+/*
     pageAction(QWebPage::OpenImageInNewWindow)->trigger();
+*/
 }
 
 void WebView::downloadImageToDisk()
 {
+/*
     pageAction(QWebPage::DownloadImageToDisk)->trigger();
+*/
 }
 
 void WebView::copyImageToClipboard()
 {
+/*
     pageAction(QWebPage::CopyImageToClipboard)->trigger();
+*/
 }
 
 void WebView::copyImageLocationToClipboard()
@@ -531,7 +555,7 @@ void WebView::addSearchEngine()
 void WebView::setProgress(int progress)
 {
     m_progress = progress;
-    applyZoom();
+    emit loadProgress(progress);
 }
 
 int WebView::levelForZoom(int zoom)
@@ -559,7 +583,9 @@ int WebView::levelForZoom(int zoom)
 
 void WebView::applyZoom()
 {
-    setZoomFactor(qreal(m_currentZoom) / 100.0);
+    setTiledBackingStoreFrozen(true);
+    m_webView.setScale(qreal(m_currentZoom) / 100.0);
+    //m_webView.setZoomFactor(qreal(m_currentZoom) / 100.0);
 
     // calculate roughly width of maximum fully visible element with current zoom factor
     int pageWidth = geometry().width() * 100 / m_currentZoom;
@@ -578,10 +604,15 @@ void WebView::applyZoom()
     page()->mainFrame()->evaluateJavaScript(QLatin1String(js));
 }
 
+void WebView::setTiledBackingStoreFrozen(bool frozen)
+{
+    m_webView.setTiledBackingStoreFrozen(frozen);
+}
+
 void WebView::zoomIn()
 {
-    int i = levelForZoom(zoomFactor() * 100);
-    //int i = levelForZoom(m_currentZoom);
+    //int i = levelForZoom(m_webView.zoomFactor() * 100);
+    int i = levelForZoom(m_currentZoom);
 
     if (i < m_zoomLevels.count() - 1)
         m_currentZoom = m_zoomLevels[i + 1];
@@ -590,8 +621,8 @@ void WebView::zoomIn()
 
 void WebView::zoomOut()
 {
-    int i = levelForZoom(zoomFactor() * 100);
-    //int i = levelForZoom(m_currentZoom);
+    //int i = levelForZoom(m_webView.zoomFactor() * 100);
+    int i = levelForZoom(m_currentZoom);
 
     if (i > 0)
         m_currentZoom = m_zoomLevels[i - 1];
@@ -623,11 +654,12 @@ void WebView::loadUrl(const QUrl &url, const QString &title)
         return;
     }
     m_initialUrl = url;
-    if (!title.isEmpty())
+/*    if (!title.isEmpty())
         emit titleChanged(tr("Loading..."));
     else
         emit titleChanged(title);
-    load(url);
+*/
+    m_webView.load(url);
 }
 
 QString WebView::lastStatusBarText() const
@@ -637,11 +669,26 @@ QString WebView::lastStatusBarText() const
 
 QUrl WebView::url() const
 {
-    QUrl url = QWebView::url();
+    QUrl url = m_webView.url();
     if (!url.isEmpty())
         return url;
 
     return m_initialUrl;
+}
+
+QString WebView::title() const
+{
+    return m_webView.title();
+}
+
+QWebPage *WebView::page() const
+{
+    return m_webView.page();
+}
+
+QWebHistory *WebView::history() const
+{
+    return m_webView.history();
 }
 
 /*
@@ -951,3 +998,21 @@ void WebView::makeAccessKeyLabel(const QChar &accessKey, const QWebElement &elem
 
 #endif
 */
+
+void WebView::freezeTicker()
+{
+    setTiledBackingStoreFrozen(true);
+    QTimer::singleShot(1500, this, SLOT(unfreezeTicker()));
+}
+
+void WebView::unfreezeTicker()
+{
+    setTiledBackingStoreFrozen(false);
+    QTimer::singleShot(0, this, SLOT(freezeTicker()));
+}
+
+void WebView::urlChangedEvent(const QUrl &url)
+{
+    resetZoom();
+    centerOn(QPoint(0, 0));
+}

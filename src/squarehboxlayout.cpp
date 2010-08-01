@@ -1,19 +1,19 @@
 // quake-copyright
 
 #include "squarehboxlayout.h"
+#include <QPoint>
 
 SquareHBoxLayout::SquareHBoxLayout(QWidget* parent)
     : QHBoxLayout(parent)
 {
 }
 
-bool SquareHBoxLayout::hasHeightForWidth() const
+QSize SquareHBoxLayout::sizeHint() const
 {
-    return true;
+    return QSize(100, 100);
 }
 
-int SquareHBoxLayout::heightForWidth(int w) const
+Qt::Orientations SquareHBoxLayout::expandingDirections() const
 {
-    return qMin(100, w / 4);
+    return Qt::Horizontal;
 }
-

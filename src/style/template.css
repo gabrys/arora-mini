@@ -10,11 +10,6 @@ html, html > body, html > body > *, html > body > * * {
     background-attachment: scroll !important;
 }
 
-/* cheat about browser window width */
-html {
-    min-width: 980px;
-}
-
 /* assure text does not overflow over screen */
 * > p, * > ul, * > ol, * > li, * > td, * > h1, * > h2, * > h3, * > h4, * > h5, * > h6 {
     max-width: %dpx !important;

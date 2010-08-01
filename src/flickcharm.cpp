@@ -35,6 +35,7 @@
 #include <QWebView>
 
 #include <QDebug>
+#include "webview.h"
 
 class FlickCharmPrivate
 {
@@ -180,6 +181,11 @@ bool FlickCharm::eventFilter(QObject *object, QEvent *event)
     FlickData *data = d->flickData.value(viewport);
     if (!viewport || !data || data->ignored.removeAll(event))
         return false;
+
+    WebView *item = dynamic_cast<WebView*>(object);
+    if (item) {
+        item->setTiledBackingStoreFrozen(true);
+    }
 
     bool consumed = false;
     switch (data->state) {

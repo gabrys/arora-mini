@@ -25,7 +25,7 @@
 #define FLICKCHARM_H
 
 // maximum number of pixels moved, to still emit click
-#define FLICKCHARM_CLICK_MAX_OFFSET 12
+#define FLICKCHARM_CLICK_MAX_OFFSET 1
 
 #include <QObject>
 #include <QWidget>

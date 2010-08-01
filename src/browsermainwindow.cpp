@@ -192,7 +192,7 @@ BrowserMainWindow::BrowserMainWindow(QWidget *parent, Qt::WindowFlags flags)
     // set up mini menu
     QWidget *miniMenu = new QWidget(this);
     QHBoxLayout *miniMenuLayout = new SquareHBoxLayout();
-    miniMenuLayout->setSpacing(1);
+    miniMenuLayout->setSpacing(0);
     QPushButton *backButton = new QPushButton(QPixmap(QLatin1String(":/graphics/back.png")), QLatin1String(""));
     QPushButton *zoomInButton = new QPushButton(QPixmap(QLatin1String(":/graphics/zoom-in.png")), QLatin1String(""));
     QPushButton *zoomOutButton = new QPushButton(QPixmap(QLatin1String(":/graphics/zoom-out.png")), QLatin1String(""));
